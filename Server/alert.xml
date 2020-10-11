@@ -1,0 +1,51 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<alert>
+    <!--Unique Message ID-->
+    <identifier>MSG00001</identifier>
+    <!--Sender ID-->
+    <sender>EMONITOR1</sender>
+    <!--Timestamp of the msg sent time-->
+    <sent>2020-10-10T10:23:00+05:30</sent>
+    <!--Actual:Actionable by all recipients-->
+    <status>Actual</status>
+    <!--Update: uuptate to the reference msg in Reference-->
+    <msgType>Alert</msgType>
+    <scope>Public</scope>
+    <!--Sender,Identifier,Sent-->
+    <!--<references>trinet@caltech.edu,TRI13970876.1,2003-06-11T20:30:00-07:00</references>-->
+
+    <info>
+
+        <category>Env</category>
+        <event>Readings</event>
+        <urgency>Past</urgency>
+        <severity>Minor</severity>
+        <certainty>Observed</certainty>
+        <senderName>EMONITOR Device - ESP32</senderName>
+
+        <parameter>
+            <valueName>Temperature</valueName>
+            <value>25.5</value>
+        </parameter>
+
+        <parameter>
+            <valueName>Humidity</valueName>
+            <value>75.021</value>
+        </parameter>
+
+        <parameter>
+            <valueName>Pressure</valueName>
+            <value>1.0</value>
+        </parameter>
+
+        <parameter>
+            <valueName>LightIntensity</valueName>
+            <value>455.5</value>
+        </parameter>
+
+        <area>
+            <areaDesc>Wadduwa, Sri Lanka</areaDesc>
+        </area>
+    </info>
+</alert>
