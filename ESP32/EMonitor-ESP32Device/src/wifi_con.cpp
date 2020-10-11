@@ -2,7 +2,7 @@
 #include <WiFi.h>
 #include "config.h"
 
-void connect_to_wifi()
+void wait_and_connect_to_wifi()
 {
     WiFi.begin(SSID, PW);
     Serial.println("");
@@ -15,4 +15,20 @@ void connect_to_wifi()
     Serial.print("[WIFI] Connected to : ");
     Serial.println(SSID);
     Serial.println("");
+}
+
+bool connect_to_wifi()
+{
+    WiFi.begin(SSID, PW);
+    delay(1000);
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        Serial.print("[WIFI] Re-connected to : ");
+        Serial.println(SSID);
+        Serial.println();
+        return true;
+    }
+
+    Serial.println("[WIFI] Not Connected to Wifi");
+    return false;
 }

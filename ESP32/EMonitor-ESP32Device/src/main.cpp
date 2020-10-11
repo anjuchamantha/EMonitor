@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <WiFi.h>
 #include "xml.h"
 #include "http.h"
 #include "readings.h"
@@ -10,9 +11,10 @@ void setup()
 {
   Serial.begin(115200);
   delay(4000);
-  connect_to_wifi();
+  wait_and_connect_to_wifi();
 }
 
+int msg = 0;
 void loop()
 {
   double temperature = round(readTemperature() * 100) / 100.0;
@@ -27,6 +29,28 @@ void loop()
   // Get the xml as a string to xmlchar variable
   generateXMLStr(xmlchar, temperature, humidity, pressure, light, identifier, datetime);
 
-  sendPostRequest(xmlchar);
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    bool connected = connect_to_wifi();
+    if (connected)
+    {
+      if (!sendPostRequest(xmlchar, msg))
+      {
+        Serial.printf("MSG %i Queued !\n\n", msg);
+      }
+    }
+    else
+    {
+      Serial.printf("MSG %i Queued !\n\n", msg);
+    }
+  }
+  else
+  {
+    if (!sendPostRequest(xmlchar, msg))
+    {
+      Serial.printf("MSG %i Queued !\n\n", msg);
+    }
+  }
+  msg++;
   delay(10000);
 }
