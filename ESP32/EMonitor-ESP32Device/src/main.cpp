@@ -2,17 +2,7 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-// #define CONFIG_H
-
 #include "config.h"
-
-// void get_SSID(char *ssid)
-// {
-//   String SSID = "SLT_FIBER_HOME";
-//   sprintf(ssid, SSID.c_str());
-// }
-
-const char *password = "chamantha97anju";
 
 String serverBase = "http://c08c97d03562.ngrok.io";
 
