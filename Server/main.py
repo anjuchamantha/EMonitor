@@ -1,11 +1,18 @@
 from flask import Flask, request
 from flask_restful import Api, Resource
 from xml.etree import ElementTree
+
 app = Flask(__name__)
 api = Api(app)
 
-def readXmlStr(xmlstr):
-    root = ElementTree.fromstring(xmlstr)
+
+def extract_data_from_xml(xml_str):
+    """
+    Given a XML string(CAP) this extracts the 'parameter' values
+    :param xml_str: XML as a string
+    :return: data as dictionary {name:value}
+    """
+    root = ElementTree.fromstring(xml_str)
     param = root.findall('info/parameter')
     data = {}
     for p in param:
@@ -14,12 +21,14 @@ def readXmlStr(xmlstr):
         data[name] = float(value)
     return data
 
+
 class Data(Resource):
     def post(self):
-        xmlstr = request.data
-        data = readXmlStr(xmlstr)
-        print(data)
+        xml_str = request.data
+        data = extract_data_from_xml(xml_str)
+        print("[POST] /data : ", data)
         return data
+
 
 class Home(Resource):
     def get(self):

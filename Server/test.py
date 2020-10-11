@@ -5,52 +5,34 @@ from xml.etree import ElementTree
 BASE = "http://127.0.0.1:2017/"
 
 
-def readTestXML():
+def read_xml_file():
+    """
+    read test xml file(CAP) and return as a string
+    :return: xml as a string
+    """
     file_name = 'alert.xml'
     full_file = os.path.abspath(file_name)
     tree = ElementTree.parse(full_file)
     root = tree.getroot()
 
-    xmlstr = ElementTree.tostring(root, encoding='utf8', method='xml')
-    # print(xmlstr)
-    return xmlstr
-
-    # param = root.findall('info/parameter')
-    # print(param)
-    # print('\n')
-    # for p in param:
-    #     name = p.find('valueName').text
-    #     value = p.find('value').text
-    #     print(name, value)
+    return ElementTree.tostring(root, encoding='utf8', method='xml')
 
 
-def fixed_xml_body_as_string():
-    return """
-    <payee>
-        <name>John Smith</name>
-        <address>
-            <street>My street</street>
-            <city>My city</city>
-            <state>My state</state>
-            <zipCode>90210</zipCode>
-        </address>
-        <phoneNumber>0123456789</phoneNumber>
-        <accountNumber>12345</accountNumber>
-    </payee>
+def send_post(xml):
     """
-
-
-def sendPOST(xmlstr):
+    send POST req with xml_str as a data param
+    :param xml: xml as a string
+    :return: None
+    """
     response = requests.post(BASE + "data",
                              headers={"Content-Type": "application/xml"},
-                             data=xmlstr
+                             data=xml
                              )
-    print(response.json())
+    if response.status_code == 200:
+        print("[200 OK] POST Successful")
     assert response.status_code == 200
-    # assert response.headers["Content-Type"] == "application/xml"
+    print(response.json())
 
 
-# test_send_xml_body_from_string_check_status_code_and_content_type()
-
-xmlstr = readTestXML()
-sendPOST(xmlstr)
+xml_str = read_xml_file()
+send_post(xml_str)
