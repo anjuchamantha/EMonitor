@@ -14,17 +14,23 @@ def extract_data_from_xml(xml_str):
     """
     root = ElementTree.fromstring(xml_str)
     param = root.findall('info/parameter')
+    datetime = root.find('sent').text
+    # print(datetime)
+    readings = dict()
+    readings['datetime'] = datetime
     data = {}
     for p in param:
         name = p.find('valueName').text
         value = p.find('value').text
         data[name] = float(value)
-    return data
+    readings["data"] = data
+    return readings
 
 
 class Data(Resource):
     def post(self):
         xml_str = request.data
+        # print(xml_str)
         data = extract_data_from_xml(xml_str)
         print("[POST] /data : ", data)
         return data
