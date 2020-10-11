@@ -2,7 +2,16 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-const char *ssid = "SLT_FIBER_HOME";
+// #define CONFIG_H
+
+#include "config.h"
+
+// void get_SSID(char *ssid)
+// {
+//   String SSID = "SLT_FIBER_HOME";
+//   sprintf(ssid, SSID.c_str());
+// }
+
 const char *password = "chamantha97anju";
 
 String serverBase = "http://c08c97d03562.ngrok.io";
@@ -10,8 +19,10 @@ String serverBase = "http://c08c97d03562.ngrok.io";
 void setup()
 {
   Serial.begin(115200);
+  Serial.println("SSID:");
+  Serial.println(SSID);
   delay(4000);
-  WiFi.begin(ssid, password);
+  WiFi.begin(SSID, PW);
 
   while (WiFi.status() != WL_CONNECTED)
   {
