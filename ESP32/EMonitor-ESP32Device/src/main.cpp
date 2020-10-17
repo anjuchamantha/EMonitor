@@ -38,7 +38,6 @@ double calculate_sd(double arr[], int len, double mean)
 
 void loop()
 {
-  // read_dht();
   double temperature = 0;
   double humidity = 0;
   double pressure = 0;
@@ -46,7 +45,7 @@ void loop()
 
   int x = 0;
   //Get 10 sensor values in 0.5s intervals
-  //Calculate median & s.d for values in 5s intervals
+  //Calculate median & s.d for values in 5s intervals (10 * 0.5)
   int rounds = 10;
   int round_time = 500;
 
@@ -81,7 +80,10 @@ void loop()
   char datetime[] = "2020-10-10T10:23:00+05:30";
 
   // Get the xml as a string to xmlchar variable
-  generateXMLStr(xmlchar, temperature, humidity, pressure, light, identifier, datetime);
+  generateXMLStr(xmlchar,
+                 temperature, humidity, pressure, light,
+                 temperature_sd, humidity_sd, pressure_sd, light_sd,
+                 identifier, datetime);
   // Serial.println(xmlchar);
   if (WiFi.status() != WL_CONNECTED)
   {
