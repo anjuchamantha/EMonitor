@@ -6,7 +6,6 @@
 #include "wifi_con.h"
 #include "config.h"
 
-String serverBase = "http://c08c97d03562.ngrok.io";
 
 void setup()
 {
@@ -19,7 +18,7 @@ void setup()
 int msg = 0;
 void loop()
 {
-  read_dht();
+  // read_dht();
   double temperature = round(readTemperature() * 100) / 100.0;
   double humidity = round(readHumidity() * 100) / 100.0;
   double pressure = round(readPressure() * 100) / 100.0;
@@ -31,7 +30,7 @@ void loop()
 
   // Get the xml as a string to xmlchar variable
   generateXMLStr(xmlchar, temperature, humidity, pressure, light, identifier, datetime);
-
+  // Serial.println(xmlchar);
   if (WiFi.status() != WL_CONNECTED)
   {
     bool connected = connect_to_wifi();

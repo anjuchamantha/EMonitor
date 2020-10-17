@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include "config.h"
 
 bool sendPostRequest(char *xmlstr, int msg)
 {
@@ -13,7 +14,8 @@ bool sendPostRequest(char *xmlstr, int msg)
 
     // Send POST request
     HTTPClient http;
-    http.begin("http://872e71ea4bde.ngrok.io/data");
+    String url = (String)serverBase + "/data";
+    http.begin((String)url);
 
     Serial.printf("[HTTP] POST Request : MSG %i\n", msg);
     int responseCode = http.POST(xmlstr);

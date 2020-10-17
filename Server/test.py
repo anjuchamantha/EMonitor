@@ -2,7 +2,8 @@ import requests
 import os
 from xml.etree import ElementTree
 
-BASE = "http://127.0.0.1:2017/"
+# BASE = "http://127.0.0.1:2017/"
+BASE = "http://a265a3bbc240.ngrok.io/"
 
 
 def read_xml_file():
