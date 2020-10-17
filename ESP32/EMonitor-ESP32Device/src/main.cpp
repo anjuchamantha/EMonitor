@@ -4,6 +4,7 @@
 #include "http.h"
 #include "readings.h"
 #include "wifi_con.h"
+#include "config.h"
 
 String serverBase = "http://c08c97d03562.ngrok.io";
 
@@ -12,7 +13,6 @@ void setup()
   Serial.begin(115200);
   delay(1000);
   wait_and_connect_to_wifi();
-
   begin_sensors();
 }
 

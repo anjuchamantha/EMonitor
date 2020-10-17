@@ -10,7 +10,8 @@ DHT dht(DHTPIN, DHTTYPE);
 Adafruit_BMP085 bmp;
 
 // Potentiometer is connected to GPIO 34 (Analog ADC1_CH6)
-const int potPin = 34;
+const int potPin = A0;
+int potValue = 0;
 
 void begin_sensors()
 {
@@ -68,7 +69,7 @@ float readPressure()
 
 float readLightIntensity()
 {
-    int potValue = 0;
+
     potValue = analogRead(potPin);
     Serial.print("Light : ");
     Serial.println(potValue);
