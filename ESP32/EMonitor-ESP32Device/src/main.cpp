@@ -5,6 +5,9 @@
 #include "readings.h"
 #include "wifi_con.h"
 #include "config.h"
+#include "utils.h"
+
+#include "Queue.h"
 
 void setup()
 {
@@ -13,28 +16,25 @@ void setup()
   wait_and_connect_to_wifi();
   begin_sensors();
 }
+const int buffersize = 10;
+
+int buffer_msg_ids[buffersize];
+
+//mean buffers
+double buffer_t[buffersize];
+double buffer_h[buffersize];
+double buffer_p[buffersize];
+double buffer_l[buffersize];
+
+//sd buffers
+double buffer_t_[buffersize];
+double buffer_h_[buffersize];
+double buffer_p_[buffersize];
+double buffer_l_[buffersize];
+
+int buffer_pointer = 0;
 
 int msg = 0;
-
-double calculate_mean(double arr[], int len)
-{
-  double tot = 0;
-  for (int i = 0; i < len; i++)
-  {
-    tot += arr[i];
-  }
-  return round((tot / len) * 100) / 100.00;
-}
-
-double calculate_sd(double arr[], int len, double mean)
-{
-  double variance = 0;
-  for (int i = 0; i < len; i++)
-  {
-    variance += pow((arr[i] - mean), 2);
-  }
-  return round(sqrt(variance) * 100) / 100.00;
-}
 
 void loop()
 {
@@ -75,7 +75,7 @@ void loop()
   double pressure_sd = calculate_sd(p_, rounds, pressure);
   double light_sd = calculate_sd(l_, rounds, light);
 
-  char xmlchar[1500];
+  char xmlchar[1700];
   char identifier[] = "MSG00001";
   char datetime[] = "2020-10-10T10:23:00+05:30";
 
@@ -84,7 +84,7 @@ void loop()
                  temperature, humidity, pressure, light,
                  temperature_sd, humidity_sd, pressure_sd, light_sd,
                  identifier, datetime);
-  // Serial.println(xmlchar);
+
   if (WiFi.status() != WL_CONNECTED)
   {
     bool connected = connect_to_wifi();
@@ -92,11 +92,39 @@ void loop()
     {
       if (!sendPostRequest(xmlchar, msg))
       {
+        buffer_msg_ids[buffer_pointer] = msg;
+
+        buffer_t[buffer_pointer] = temperature;
+        buffer_h[buffer_pointer] = humidity;
+        buffer_p[buffer_pointer] = pressure;
+        buffer_l[buffer_pointer] = light;
+
+        buffer_t_[buffer_pointer] = temperature_sd;
+        buffer_h_[buffer_pointer] = humidity_sd;
+        buffer_p_[buffer_pointer] = pressure_sd;
+        buffer_l_[buffer_pointer] = light_sd;
+
+        buffer_pointer++;
+
         Serial.printf("MSG %i Queued !\n\n", msg);
       }
     }
     else
     {
+      buffer_msg_ids[buffer_pointer] = msg;
+
+      buffer_t[buffer_pointer] = temperature;
+      buffer_h[buffer_pointer] = humidity;
+      buffer_p[buffer_pointer] = pressure;
+      buffer_l[buffer_pointer] = light;
+
+      buffer_t_[buffer_pointer] = temperature_sd;
+      buffer_h_[buffer_pointer] = humidity_sd;
+      buffer_p_[buffer_pointer] = pressure_sd;
+      buffer_l_[buffer_pointer] = light_sd;
+
+      buffer_pointer++;
+
       Serial.printf("MSG %i Queued !\n\n", msg);
     }
   }
@@ -104,6 +132,20 @@ void loop()
   {
     if (!sendPostRequest(xmlchar, msg))
     {
+      buffer_msg_ids[buffer_pointer] = msg;
+
+      buffer_t[buffer_pointer] = temperature;
+      buffer_h[buffer_pointer] = humidity;
+      buffer_p[buffer_pointer] = pressure;
+      buffer_l[buffer_pointer] = light;
+
+      buffer_t_[buffer_pointer] = temperature_sd;
+      buffer_h_[buffer_pointer] = humidity_sd;
+      buffer_p_[buffer_pointer] = pressure_sd;
+      buffer_l_[buffer_pointer] = light_sd;
+
+      buffer_pointer++;
+
       Serial.printf("MSG %i Queued !\n\n", msg);
     }
   }
