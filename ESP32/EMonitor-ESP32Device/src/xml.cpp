@@ -3,7 +3,7 @@
 void generateXMLStr(char *xmlchar,
                     double temperature, double humidity, double pressure, double light,
                     double temperature_sd, double humidity_sd, double pressure_sd, double light_sd,
-                    char *identifier, char *timestamp)
+                    String identifier, String timestamp)
 {
     String temp = String(temperature);
     String hum = String(humidity);
@@ -48,7 +48,7 @@ void generateXMLStr(char *xmlchar,
         "</info>"
         "</alert>",
 
-        identifier, timestamp,
+        identifier.c_str(), timestamp.c_str(),
         "temperature", temp.c_str(),
         "humidity", hum.c_str(),
         "pressure", pres.c_str(),
