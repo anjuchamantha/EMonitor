@@ -5,12 +5,12 @@
 
 #define DHTPIN 4
 #define DHTTYPE DHT11
-
 DHT dht(DHTPIN, DHTTYPE);
+
 Adafruit_BMP085 bmp;
 
 // Potentiometer is connected to GPIO 34 (Analog ADC1_CH6)
-const int potPin = A0;
+const int ldrPin = A0;
 
 void begin_sensors()
 {
@@ -32,9 +32,9 @@ float readTemperature()
         Serial.println(F("[DHT] Failed to read Temperature from DHT sensor!\n"));
         return 0;
     }
-    Serial.print("Temperature : ");
-    Serial.print(t);
-    Serial.println(" °C ");
+    // Serial.print("Temperature : ");
+    // Serial.print(t);
+    // Serial.println(" °C ");
     return t;
 }
 
@@ -46,9 +46,9 @@ float readHumidity()
         Serial.println(F("[DHT] Failed to read Humidity from DHT sensor!\n"));
         return 0;
     }
-    Serial.print("Humidity : ");
-    Serial.print(h);
-    Serial.println(" % ");
+    // Serial.print("Humidity : ");
+    // Serial.print(h);
+    // Serial.println(" % ");
     return h;
 }
 
@@ -60,33 +60,17 @@ float readPressure()
         Serial.println(F("[BMP] Failed to read Pressure from BMP sensor!\n"));
         return 0;
     }
-    Serial.print("Pressure : ");
-    Serial.print(p);
-    Serial.println(" Pa ");
+    // Serial.print("Pressure : ");
+    // Serial.print(p);
+    // Serial.println(" Pa ");
     return p;
 }
 
 float readLightIntensity()
 {
-    // int potValue;
-    float potValue = analogRead(potPin);
-    Serial.print("Light : ");
-    Serial.println(potValue);
-    Serial.println("  ");
-    return potValue;
-}
-
-void read_dht()
-{
-    int x = 0;
-    while (x < 20)
-    {
-        delay(2000);
-        readTemperature();
-        readHumidity();
-        readPressure();
-        readLightIntensity();
-        Serial.println();
-        x++;
-    }
+    float ldrVal = analogRead(ldrPin);
+    // Serial.print("Light : ");
+    // Serial.println(potValue);
+    // Serial.println("  ");
+    return ldrVal;
 }

@@ -5,10 +5,28 @@ using namespace std;
 
 #include "xml.h"
 #include "http.h"
+#include "time.h"
+
 #include "readings.h"
 #include "wifi_con.h"
 #include "config.h"
 #include "utils.h"
+
+const char *ntpServer = "pool.ntp.org";
+const long gmtOffset_sec = 3600;
+const int daylightOffset_sec = 3600;
+
+void printLocalTime()
+{
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo))
+  {
+    Serial.println("Failed to obtain time");
+    return;
+  }
+  Serial.print("[TIME] ");
+  Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+}
 
 void setup()
 {
@@ -16,6 +34,10 @@ void setup()
   delay(1000);
   wait_and_connect_to_wifi();
   begin_sensors();
+
+  //init and get the time
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+  // printLocalTime();
 }
 queue<String> buffer_identifier;
 queue<String> buffer_datetime;
@@ -36,6 +58,7 @@ queue<double> buffer_l_;
 int msg = 0;
 void loop()
 {
+  //BUFFER LOGIC
 
   //if buffer is not empty
   //    loop buffer
@@ -95,6 +118,8 @@ void loop()
       break;
     }
   }
+
+  // MAIN LOGIC
   double temperature = 0;
   double humidity = 0;
   double pressure = 0;
@@ -104,7 +129,7 @@ void loop()
   //Get 10 sensor values in 0.5s intervals
   //Calculate median & s.d for values in 5s intervals (10 * 0.5)
   int rounds = 10;
-  int round_time = 500;
+  int round_time = 1000;
 
   //get values and keep in the arrays
   double t_[rounds];
@@ -112,6 +137,7 @@ void loop()
   double p_[rounds];
   double l_[rounds];
 
+  Serial.print("[SENSORS] Reading sensors > ");
   while (x < rounds)
   {
     t_[x] = round(readTemperature() * 100) / 100.00;
@@ -119,9 +145,11 @@ void loop()
     p_[x] = round(readPressure() * 100) / 100.00;
     l_[x] = round(readLightIntensity() * 100) / 100.00;
     delay(round_time);
-    Serial.println();
+    Serial.print(".");
     x++;
   }
+  Serial.print("\n");
+
   temperature = calculate_mean(t_, rounds);
   humidity = calculate_mean(h_, rounds);
   pressure = calculate_mean(p_, rounds);
@@ -131,6 +159,14 @@ void loop()
   double humidity_sd = calculate_sd(h_, rounds, humidity);
   double pressure_sd = calculate_sd(p_, rounds, pressure);
   double light_sd = calculate_sd(l_, rounds, light);
+
+  printLocalTime();
+
+  Serial.printf("Temperature : %.2f +- %.2f %s \n", temperature, temperature_sd, "°C");
+  Serial.printf("Humidity : %.2f +- %.2f %s \n", humidity, humidity_sd, "%");
+  Serial.printf("Pressure : %.2f +- %.2f %s \n", pressure, pressure_sd, "Pa");
+  Serial.printf("Light : %.2f +- %.2f \n", light, light_sd);
+  Serial.print("\n");
 
   char xmlchar[1700];
   String identifier = "MSG00001";
@@ -163,7 +199,7 @@ void loop()
         buffer_p_.push(pressure_sd);
         buffer_l_.push(light_sd);
 
-        Serial.printf("MSG %i Queued !\n\n", msg);
+        Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
       }
     }
     else
@@ -182,7 +218,7 @@ void loop()
       buffer_p_.push(pressure_sd);
       buffer_l_.push(light_sd);
 
-      Serial.printf("MSG %i Queued !\n\n", msg);
+      Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
     }
   }
   else
@@ -203,9 +239,9 @@ void loop()
       buffer_p_.push(pressure_sd);
       buffer_l_.push(light_sd);
 
-      Serial.printf("MSG %i Queued !\n\n", msg);
+      Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
     }
   }
   msg++;
-  delay(10000);
+  // delay(10000);
 }

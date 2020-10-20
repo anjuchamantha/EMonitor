@@ -9,7 +9,9 @@ void wait_and_connect_to_wifi()
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(1000);
-        Serial.println("[WIFI] Connecting to WiFi...");
+        Serial.print("[WIFI] Trying to connect to : ");
+        Serial.print(SSID);
+        Serial.println("...");
     }
 
     Serial.print("[WIFI] Connected to : ");
@@ -20,7 +22,7 @@ void wait_and_connect_to_wifi()
 bool connect_to_wifi()
 {
     WiFi.begin(SSID, PW);
-    delay(1000);
+    // delay(1000);
     if (WiFi.status() == WL_CONNECTED)
     {
         Serial.print("[WIFI] Re-connected to : ");
