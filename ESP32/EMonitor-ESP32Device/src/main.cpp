@@ -174,7 +174,7 @@ void loop()
   Serial.print("\n");
 
   char xmlchar[1700];
-  String identifier = "MSG00001";
+  String identifier = String(msg);
 
   char datetime_[32] = {};
   getTimeStamp(datetime_);
@@ -185,7 +185,6 @@ void loop()
                  temperature, humidity, pressure, light,
                  temperature_sd, humidity_sd, pressure_sd, light_sd,
                  identifier, datetime);
-
   if (WiFi.status() != WL_CONNECTED)
   {
     bool connected = connect_to_wifi();
