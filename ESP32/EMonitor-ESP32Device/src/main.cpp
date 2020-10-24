@@ -13,19 +13,26 @@ using namespace std;
 #include "utils.h"
 
 const char *ntpServer = "pool.ntp.org";
-const long gmtOffset_sec = 3600;
-const int daylightOffset_sec = 3600;
+const long gmtOffset_sec = 19800;
+const int daylightOffset_sec = 0;
 
-void printLocalTime()
+void getTimeStamp(char *datetime_)
 {
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo))
   {
     Serial.println("Failed to obtain time");
-    return;
   }
   Serial.print("[TIME] ");
-  Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+  // sprintf(times, &timeinfo, "%Y-%m-%dT%H:%M:%S%z");
+  // Serial.println(&timeinfo, "%Y-%m-%dT%H:%M:%S%z");
+
+  char timeString[32];
+  time_t timeT = time(NULL);
+  strftime(timeString, sizeof(timeString), "%Y-%m-%dT%H:%M:%S%z", localtime(&timeT));
+  printf("%s\n", timeString);
+  sprintf(datetime_, timeString);
+  // datetime_ = timeString;
 }
 
 void setup()
@@ -160,17 +167,18 @@ void loop()
   double pressure_sd = calculate_sd(p_, rounds, pressure);
   double light_sd = calculate_sd(l_, rounds, light);
 
-  printLocalTime();
-
   Serial.printf("Temperature : %.2f +- %.2f %s \n", temperature, temperature_sd, "°C");
-  Serial.printf("Humidity : %.2f +- %.2f %s \n", humidity, humidity_sd, "%");
-  Serial.printf("Pressure : %.2f +- %.2f %s \n", pressure, pressure_sd, "Pa");
-  Serial.printf("Light : %.2f +- %.2f \n", light, light_sd);
+  Serial.printf("Humidity    : %.2f +- %.2f %s \n", humidity, humidity_sd, "%");
+  Serial.printf("Pressure    : %.2f +- %.2f %s \n", pressure, pressure_sd, "Pa");
+  Serial.printf("Light       : %.2f +- %.2f \n", light, light_sd);
   Serial.print("\n");
 
   char xmlchar[1700];
   String identifier = "MSG00001";
-  String datetime = "2020-10-10T10:23:00+05:30";
+
+  char datetime_[32] = {};
+  getTimeStamp(datetime_);
+  String datetime = String(datetime_);
 
   // Get the xml as a string to xmlchar variable
   generateXMLStr(xmlchar,

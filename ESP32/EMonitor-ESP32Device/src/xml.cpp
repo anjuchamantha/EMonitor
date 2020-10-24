@@ -19,9 +19,9 @@ void generateXMLStr(char *xmlchar,
         xmlchar,
         "<?xml version = \"1.0\" encoding = \"utf8\"?>"
         "<alert>"
-        "<identifier> %s </identifier>"
+        "<identifier>%s</identifier>"
         "<sender> EMONITOR1</sender>"
-        "<sent> %s </sent>"
+        "<sent> %s</sent>"
         "<status> Actual</status>"
         "<msgType> Alert</msgType>"
         "<scope> Public</scope>"
@@ -34,17 +34,17 @@ void generateXMLStr(char *xmlchar,
         "<certainty> Observed</certainty>"
         "<senderName> EMONITOR1 Device</senderName>"
 
-        "<parameter><valueName> %s </valueName><value> %s </value ></parameter>"
-        "<parameter><valueName> %s </valueName><value> %s </value ></parameter>"
-        "<parameter><valueName> %s </valueName><value> %s </value ></parameter>"
-        "<parameter><valueName> %s </valueName><value> %s </value ></parameter>"
+        "<parameter><valueName>%s</valueName><value>%s</value></parameter>"
+        "<parameter><valueName>%s</valueName><value>%s</value></parameter>"
+        "<parameter><valueName>%s</valueName><value>%s</value></parameter>"
+        "<parameter><valueName>%s</valueName><value>%s</value></parameter>"
 
-        "<parameter><valueName> %s </valueName><value> %s </value ></parameter>"
-        "<parameter><valueName> %s </valueName><value> %s </value ></parameter>"
-        "<parameter><valueName> %s </valueName><value> %s </value ></parameter>"
-        "<parameter><valueName> %s </valueName><value> %s </value ></parameter>"
+        "<parameter><valueName>%s</valueName><value>%s</value></parameter>"
+        "<parameter><valueName>%s</valueName><value>%s</value></parameter>"
+        "<parameter><valueName>%s</valueName><value>%s</value></parameter>"
+        "<parameter><valueName>%s</valueName><value>%s</value></parameter>"
 
-        "<area><areaDesc> Wadduwa,Sri Lanka</areaDesc></area>"
+        "<area><areaDesc>Wadduwa,Sri Lanka</areaDesc></area>"
         "</info>"
         "</alert>",
 

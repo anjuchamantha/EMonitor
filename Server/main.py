@@ -14,14 +14,14 @@ def extract_data_from_xml(xml_str):
     """
     root = ElementTree.fromstring(xml_str)
     param = root.findall('info/parameter')
-    datetime = root.find('sent').text
+    datetime = root.find('sent').text.strip()
     # print(datetime)
     readings = dict()
     readings['datetime'] = datetime
     data = {}
     for p in param:
-        name = p.find('valueName').text
-        value = p.find('value').text
+        name = p.find('valueName').text.strip()
+        value = p.find('value').text.strip()
         data[name] = float(value)
     readings["data"] = data
     return readings
