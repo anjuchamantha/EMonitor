@@ -74,14 +74,6 @@ def extract_data_from_xml(xml_str):
     return readings
 
 
-# class Data(Resource):
-#     def post(self):
-#         xml_str = request.data
-#         # print(xml_str)
-#         data = extract_data_from_xml(xml_str)
-#         print("[POST] /data : ", data)
-#         return data
-
 def put_to_db(xml_data):
     msg_id = (xml_data['identifier'])
     timestamp = xml_data['datetime']
@@ -96,10 +88,15 @@ def put_to_db(xml_data):
     pressure_sd = xml_data['data']['pressure_sd']
     light_sd = xml_data['data']['lightIntensity_sd']
 
-    DB_data = EMonitor(msg_id, timestamp, temperature, humidity, pressure, light,
-                       temperature_sd, humidity_sd, pressure_sd, light_sd)
-    db.session.add(DB_data)
-    db.session.commit()
+    try:
+        DB_data = EMonitor(msg_id, timestamp, temperature, humidity, pressure, light,
+                           temperature_sd, humidity_sd, pressure_sd, light_sd)
+        db.session.add(DB_data)
+        db.session.commit()
+        return True
+
+    except:
+        return False
 
 
 @app.route('/data', methods=['POST'])
@@ -107,13 +104,16 @@ def post():
     xml_str = request.data
     xml_data = extract_data_from_xml(xml_str)
     print("[POST] /data : ", xml_data)
-    put_to_db(xml_data)
-    return xml_data
+    if put_to_db(xml_data):
+        return "DATABASE updated"
+    else:
+        return "DATABASE modification failed !"
 
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    table = EMonitor.query.all()
+    return render_template("index.html", table=table)
 
 
 if __name__ == "__main__":

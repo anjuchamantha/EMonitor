@@ -4,16 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>EMonitor</title>
-<!--    <meta name="author" content="name">-->
-<!--    <meta name="description" content="description here">-->
-<!--    <meta name="keywords" content="keywords,here">-->
-<!--    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">-->
-<!--    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">-->
-<!--    <link rel="stylesheet" href="../static/stylesheet.css" type="text/css">-->
+    <!--    <meta name="author" content="name">-->
+    <!--    <meta name="description" content="description here">-->
+    <!--    <meta name="keywords" content="keywords,here">-->
+    <!--    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">-->
+    <!--    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">-->
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-<div class="container">
-      This is the body where table of data is shown.
-</div>
+<table>
+    <tr>
+        <th>#</th>
+        <th>Identifier</th>
+        <th>Timestamp</th>
+
+        <th>Temperature</th>
+        <th>SD</th>
+        <th>Humidity</th>
+        <th>SD</th>
+        <th>Pressure</th>
+        <th>SD</th>
+        <th>Light</th>
+        <th>SD</th>
+    </tr>
+    {% for entry in table %}
+    <tr>
+        <td>{{ entry.id }}</td>
+        <td>{{ entry.msg_id }}</td>
+        <td>{{ entry.timestamp }}</td>
+
+        <td>{{ entry.temperature }}</td>
+        <td>{{ entry.temperature_sd }}</td>
+        <td>{{ entry.humidity }}</td>
+        <td>{{ entry.humidity_sd }}</td>
+        <td>{{ entry.pressure }}</td>
+        <td>{{ entry.pressure_sd }}</td>
+        <td>{{ entry.light }}</td>
+        <td>{{ entry.light_sd }}</td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
 </body>
 </html>

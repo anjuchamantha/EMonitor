@@ -82,6 +82,8 @@ void loop()
       int msg_id_buf = buffer_msg_ids.front();
       String identifier_buf = (String)buffer_identifier.front();
       String datetime_buf = (String)buffer_datetime.front();
+      Serial.println(identifier_buf);
+      Serial.println(datetime_buf);
 
       double t_buf = buffer_t.front();
       double h_buf = buffer_h.front();
@@ -100,7 +102,10 @@ void loop()
       if (sendPostRequest(xmlchar_buf, msg_id_buf))
       {
         Serial.printf("[BUFFER] POST successful for : MSG %i\n\n", msg_id_buf);
+
         buffer_msg_ids.pop();
+        buffer_identifier.pop();
+        buffer_datetime.pop();
 
         buffer_t.pop();
         buffer_h.pop();
