@@ -11,6 +11,61 @@ using namespace std;
 #include "config.h"
 #include "utils.h"
 
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+// Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
+void beginOLED()
+{
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+  { // Address 0x3D for 128x64
+    Serial.println(F("SSD1306 allocation failed"));
+    for (;;)
+      ;
+  }
+  delay(2000);
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(WHITE);
+  display.setCursor(20, 25);
+  display.println("EMonitor");
+  display.setTextSize(1);
+  display.println("");
+  display.println("GITHUB/ANJUCHAMANTHA");
+  display.display();
+  delay(10000);
+  display.setCursor(0, 0);
+}
+
+String t0 = "";
+String t1 = "";
+String t2 = "";
+String t3 = "";
+String t4 = "";
+String t5 = "";
+String t6 = "";
+String t7 = "";
+
+void displayText()
+{
+  display.setCursor(0, 0);
+  display.clearDisplay();
+  display.println(t0);
+  display.println(t1);
+  display.println(t2);
+  display.println(t3);
+  display.println(t4);
+  display.println(t5);
+  display.println(t6);
+  display.println(t7);
+  display.display();
+}
+
 const char *ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 19800;
 const int daylightOffset_sec = 0;
@@ -102,8 +157,13 @@ void pushToBuffers()
 void setup()
 {
   Serial.begin(115200);
-  delay(1000);
+  beginOLED();
+  t7 = String("WIFI   : X");
+  t6 = String("SERVER : X");
+  displayText();
   wait_and_connect_to_wifi();
+  t7 = String("WIFI   : Connected");
+  displayText();
   begin_sensors();
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 }
@@ -122,6 +182,8 @@ void loop()
     Serial.println("[BUFFER] Processing Buffer... ");
     if (WiFi.status() == WL_CONNECTED)
     {
+      t7 = String("WIFI   : Connected");
+      displayText();
       char xmlchar_buf[1700];
 
       int msg_id_buf = buffer_msg_ids.front();
@@ -146,12 +208,16 @@ void loop()
                      identifier_buf, datetime_buf);
       if (sendPostRequest(xmlchar_buf, msg_id_buf))
       {
-        Serial.printf("[BUFFER] POST successful for : MSG %i\n\n", msg_id_buf);
 
+        Serial.printf("[BUFFER] POST successful for : MSG %i\n\n", msg_id_buf);
         popBuffers();
+        t6 = String("SERVER : Connected");
+        displayText();
       }
       else
       {
+        t6 = String("SERVER : X");
+        displayText();
         Serial.printf("[BUFFER] POST Failed for : MSG %i\n\n", msg_id_buf);
         break;
       }
@@ -159,6 +225,9 @@ void loop()
     else
     {
       Serial.println("[WIFi] Not Connected !");
+      t7 = String("WIFI   : X");
+      t6 = String("SERVER : X");
+      displayText();
       Serial.println("[BUFFER] Buffer Processing Skipped !\n\n");
       break;
     }
@@ -207,6 +276,12 @@ void loop()
   Serial.printf("Light       : %.2f +- %.2f \n", light, light_sd);
   Serial.print("\n");
 
+  t0 = String("Temp       :" + String(temperature));
+  t1 = String("Humidity   :" + String(humidity));
+  t2 = String("Pressure   :" + String(pressure));
+  t3 = String("Light      :" + String(light));
+  displayText();
+
   identifier = String(msg);
   getTimeStamp(datetime_);
   datetime = String(datetime_);
@@ -218,31 +293,46 @@ void loop()
                  identifier, datetime);
   if (WiFi.status() != WL_CONNECTED)
   {
+    t7 = String("WIFI   : X");
+    t6 = String("SERVER : X");
+    displayText();
     bool connected = connect_to_wifi();
     if (connected)
     {
+      t7 = String("WIFI   : Connected");
+      displayText();
       if (!sendPostRequest(xmlchar, msg))
       {
         pushToBuffers();
-
         Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
+        t6 = String("SERVER : X");
+        displayText();
       }
+      t6 = String("SERVER : Connected");
+      displayText();
     }
     else
     {
       pushToBuffers();
-
       Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
+      t7 = String("WIFI   : X");
+      t6 = String("SERVER : X");
+      displayText();
     }
   }
   else
   {
+    t7 = String("WIFI   : Connected");
+    displayText();
     if (!sendPostRequest(xmlchar, msg))
     {
       pushToBuffers();
-
       Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
+      t6 = String("SERVER : X");
+      displayText();
     }
+    t6 = String("SERVER : Connected");
+    displayText();
   }
   msg++;
   // delay(10000);
