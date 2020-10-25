@@ -280,10 +280,10 @@ void loop()
   Serial.printf("Light       : %.2f +- %.2f \n", light, light_sd);
   Serial.print("\n");
 
-  t0 = String("Temp       :" + String(temperature));
-  t1 = String("Humidity   :" + String(humidity));
-  t2 = String("Pressure   :" + String(pressure));
-  t3 = String("Light      :" + String(light));
+  t0 = String("Temp     " + String(temperature) + "     C");
+  t1 = String("Humidity " + String(humidity) + "     %");
+  t2 = String("Pressure " + String(pressure) + " Pa");
+  t3 = String("Light    " + String(light) + " L");
   displayText();
 
   identifier = String(msg);

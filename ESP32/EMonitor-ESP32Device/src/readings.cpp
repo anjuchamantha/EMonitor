@@ -68,9 +68,13 @@ float readPressure()
 
 float readLightIntensity()
 {
-    float ldrVal = analogRead(ldrPin);
+    float ldrVal = analogRead(ldrPin) * 100 / 3000;
     // Serial.print("Light : ");
     // Serial.println(potValue);
     // Serial.println("  ");
+    if (ldrVal > 100)
+    {
+        return 100.00;
+    }
     return ldrVal;
 }
