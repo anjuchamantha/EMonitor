@@ -10,8 +10,17 @@
     <!--    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">-->
     <!--    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">-->
     <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
+    <div class ="now-card">
+        <h2>Message ID : {{ table[0].msg_id }}</h2>
+        <h3>Timestamp : {{ table[0].timestamp }}</h3>
+        <div class="card w3-quarter"><p>Temerature : {{ table[0].temperature }}</p></div>
+        <div class="card w3-quarter"><p>Humidity : {{ table[0].humidity }}</p></div>
+        <div class="card w3-quarter"><p>Pressure : {{ table[0].pressure }}</p></div>
+        <div class="card w3-quarter"><p>Light : {{ table[0].light }}</p></div>
+    </div>
 <table>
     <tr>
         <th>#</th>
