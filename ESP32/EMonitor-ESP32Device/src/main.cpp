@@ -38,7 +38,7 @@ void beginOLED()
   display.println("");
   display.println("GITHUB/ANJUCHAMANTHA");
   display.display();
-  delay(10000);
+  delay(5000);
   display.setCursor(0, 0);
 }
 
@@ -158,11 +158,11 @@ void setup()
 {
   Serial.begin(115200);
   beginOLED();
-  t7 = String("WIFI   : X");
-  t6 = String("SERVER : X");
+  t7 = String("WIFI   : 0");
+  t6 = String("SERVER : 0");
   displayText();
   wait_and_connect_to_wifi();
-  t7 = String("WIFI   : Connected");
+  t7 = String("WIFI   : 1");
   displayText();
   begin_sensors();
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
@@ -182,7 +182,7 @@ void loop()
     Serial.println("[BUFFER] Processing Buffer... ");
     if (WiFi.status() == WL_CONNECTED)
     {
-      t7 = String("WIFI   : Connected");
+      t7 = String("WIFI   : 1");
       displayText();
       char xmlchar_buf[1700];
 
@@ -211,12 +211,12 @@ void loop()
 
         Serial.printf("[BUFFER] POST successful for : MSG %i\n\n", msg_id_buf);
         popBuffers();
-        t6 = String("SERVER : Connected");
+        t6 = String("SERVER : 1 M-" + String(msg_id_buf) + " <B>");
         displayText();
       }
       else
       {
-        t6 = String("SERVER : X");
+        t6 = String("SERVER : 0");
         displayText();
         Serial.printf("[BUFFER] POST Failed for : MSG %i\n\n", msg_id_buf);
         break;
@@ -225,8 +225,8 @@ void loop()
     else
     {
       Serial.println("[WIFi] Not Connected !");
-      t7 = String("WIFI   : X");
-      t6 = String("SERVER : X");
+      t7 = String("WIFI   : 0");
+      t6 = String("SERVER : 0");
       displayText();
       Serial.println("[BUFFER] Buffer Processing Skipped !\n\n");
       break;
@@ -248,6 +248,7 @@ void loop()
   double l_[rounds];
 
   Serial.print("[SENSORS] Reading sensors > ");
+  String temp = String("M-" + String(msg) + " ");
   while (x < rounds)
   {
     t_[x] = round(readTemperature() * 100) / 100.00;
@@ -255,6 +256,9 @@ void loop()
     p_[x] = round(readPressure() * 100) / 100.00;
     l_[x] = round(readLightIntensity() * 100) / 100.00;
     Serial.print(".");
+    temp = temp + "-";
+    t5 = temp;
+    displayText();
     delay(round_time);
     x++;
   }
@@ -293,46 +297,49 @@ void loop()
                  identifier, datetime);
   if (WiFi.status() != WL_CONNECTED)
   {
-    t7 = String("WIFI   : X");
-    t6 = String("SERVER : X");
+    t7 = String("WIFI   : 0");
+    t6 = String("SERVER : 0");
     displayText();
     bool connected = connect_to_wifi();
     if (connected)
     {
-      t7 = String("WIFI   : Connected");
+      t7 = String("WIFI   : 1");
       displayText();
       if (!sendPostRequest(xmlchar, msg))
       {
         pushToBuffers();
         Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
-        t6 = String("SERVER : X");
+        t6 = String("SERVER : 0 M-" + String(msg) + " *");
         displayText();
       }
-      t6 = String("SERVER : Connected");
+      t6 = String("SERVER : 1 M-" + String(msg));
       displayText();
     }
     else
     {
       pushToBuffers();
       Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
-      t7 = String("WIFI   : X");
-      t6 = String("SERVER : X");
+      t7 = String("WIFI   : 0");
+      t6 = String("SERVER : 0 M-" + String(msg) + " *");
       displayText();
     }
   }
   else
   {
-    t7 = String("WIFI   : Connected");
+    t7 = String("WIFI   : 1");
     displayText();
     if (!sendPostRequest(xmlchar, msg))
     {
       pushToBuffers();
       Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
-      t6 = String("SERVER : X");
+      t6 = String("SERVER : 0 M-" + String(msg) + " *");
       displayText();
     }
-    t6 = String("SERVER : Connected");
-    displayText();
+    else
+    {
+      t6 = String("SERVER : 1 M-" + String(msg));
+      displayText();
+    }
   }
   msg++;
   // delay(10000);
