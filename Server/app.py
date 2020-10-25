@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 from flask_restful import Api, Resource
 from xml.etree import ElementTree
 
@@ -112,7 +113,7 @@ def post():
 
 @app.route('/')
 def index():
-    table = EMonitor.query.all()
+    table = EMonitor.query.order_by(desc(EMonitor.timestamp)).limit(20).all()
     return render_template("index.html", table=table)
 
 
