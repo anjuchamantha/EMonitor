@@ -22,7 +22,6 @@ void wait_and_connect_to_wifi()
 bool connect_to_wifi()
 {
     WiFi.begin(SSID, PW);
-    // delay(1000);
     if (WiFi.status() == WL_CONNECTED)
     {
         Serial.print("[WIFI] Re-connected to : ");

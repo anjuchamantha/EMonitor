@@ -2,7 +2,6 @@
 #include <WiFi.h>
 #include <queue>
 using namespace std;
-
 #include "xml.h"
 #include "http.h"
 #include "time.h"
@@ -15,6 +14,37 @@ using namespace std;
 const char *ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 19800;
 const int daylightOffset_sec = 0;
+
+queue<String> buffer_identifier;
+queue<String> buffer_datetime;
+queue<int> buffer_msg_ids;
+
+//mean buffers
+queue<double> buffer_t;
+queue<double> buffer_h;
+queue<double> buffer_p;
+queue<double> buffer_l;
+
+//sd buffers
+queue<double> buffer_t_;
+queue<double> buffer_h_;
+queue<double> buffer_p_;
+queue<double> buffer_l_;
+
+int msg = 0;
+double temperature = 0;
+double humidity = 0;
+double pressure = 0;
+double light = 0;
+double temperature_sd = 0;
+double humidity_sd = 0;
+double pressure_sd = 0;
+double light_sd = 0;
+
+char xmlchar[1700];
+String identifier;
+char datetime_[32] = {};
+String datetime;
 
 void getTimeStamp(char *datetime_)
 {
@@ -35,34 +65,49 @@ void getTimeStamp(char *datetime_)
   // datetime_ = timeString;
 }
 
+void popBuffers()
+{
+  buffer_msg_ids.pop();
+  buffer_identifier.pop();
+  buffer_datetime.pop();
+
+  buffer_t.pop();
+  buffer_h.pop();
+  buffer_p.pop();
+  buffer_l.pop();
+
+  buffer_t_.pop();
+  buffer_h_.pop();
+  buffer_p_.pop();
+  buffer_l_.pop();
+}
+
+void pushToBuffers()
+{
+  buffer_msg_ids.push(msg);
+  buffer_identifier.push(identifier);
+  buffer_datetime.push(datetime);
+
+  buffer_t.push(temperature);
+  buffer_h.push(humidity);
+  buffer_p.push(pressure);
+  buffer_l.push(light);
+
+  buffer_t_.push(temperature_sd);
+  buffer_h_.push(humidity_sd);
+  buffer_p_.push(pressure_sd);
+  buffer_l_.push(light_sd);
+}
+
 void setup()
 {
   Serial.begin(115200);
   delay(1000);
   wait_and_connect_to_wifi();
   begin_sensors();
-
-  //init and get the time
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-  // printLocalTime();
 }
-queue<String> buffer_identifier;
-queue<String> buffer_datetime;
-queue<int> buffer_msg_ids;
 
-//mean buffers
-queue<double> buffer_t;
-queue<double> buffer_h;
-queue<double> buffer_p;
-queue<double> buffer_l;
-
-//sd buffers
-queue<double> buffer_t_;
-queue<double> buffer_h_;
-queue<double> buffer_p_;
-queue<double> buffer_l_;
-
-int msg = 0;
 void loop()
 {
   //BUFFER LOGIC
@@ -103,19 +148,7 @@ void loop()
       {
         Serial.printf("[BUFFER] POST successful for : MSG %i\n\n", msg_id_buf);
 
-        buffer_msg_ids.pop();
-        buffer_identifier.pop();
-        buffer_datetime.pop();
-
-        buffer_t.pop();
-        buffer_h.pop();
-        buffer_p.pop();
-        buffer_l.pop();
-
-        buffer_t_.pop();
-        buffer_h_.pop();
-        buffer_p_.pop();
-        buffer_l_.pop();
+        popBuffers();
       }
       else
       {
@@ -132,14 +165,10 @@ void loop()
   }
 
   // MAIN LOGIC
-  double temperature = 0;
-  double humidity = 0;
-  double pressure = 0;
-  double light = 0;
 
   int x = 0;
   //Get 10 sensor values in 0.5s intervals
-  //Calculate median & s.d for values in 5s intervals (10 * 0.5)
+  //Calculate median & s.d for values in 10s intervals (10 readings x 1s)
   int rounds = 10;
   int round_time = 1000;
 
@@ -156,8 +185,8 @@ void loop()
     h_[x] = round(readHumidity() * 100) / 100.00;
     p_[x] = round(readPressure() * 100) / 100.00;
     l_[x] = round(readLightIntensity() * 100) / 100.00;
-    delay(round_time);
     Serial.print(".");
+    delay(round_time);
     x++;
   }
   Serial.print("\n");
@@ -167,10 +196,10 @@ void loop()
   pressure = calculate_mean(p_, rounds);
   light = calculate_mean(l_, rounds);
 
-  double temperature_sd = calculate_sd(t_, rounds, temperature);
-  double humidity_sd = calculate_sd(h_, rounds, humidity);
-  double pressure_sd = calculate_sd(p_, rounds, pressure);
-  double light_sd = calculate_sd(l_, rounds, light);
+  temperature_sd = calculate_sd(t_, rounds, temperature);
+  humidity_sd = calculate_sd(h_, rounds, humidity);
+  pressure_sd = calculate_sd(p_, rounds, pressure);
+  light_sd = calculate_sd(l_, rounds, light);
 
   Serial.printf("Temperature : %.2f +- %.2f %s \n", temperature, temperature_sd, "°C");
   Serial.printf("Humidity    : %.2f +- %.2f %s \n", humidity, humidity_sd, "%");
@@ -178,12 +207,9 @@ void loop()
   Serial.printf("Light       : %.2f +- %.2f \n", light, light_sd);
   Serial.print("\n");
 
-  char xmlchar[1700];
-  String identifier = String(msg);
-
-  char datetime_[32] = {};
+  identifier = String(msg);
   getTimeStamp(datetime_);
-  String datetime = String(datetime_);
+  datetime = String(datetime_);
 
   // Get the xml as a string to xmlchar variable
   generateXMLStr(xmlchar,
@@ -197,38 +223,14 @@ void loop()
     {
       if (!sendPostRequest(xmlchar, msg))
       {
-        buffer_msg_ids.push(msg);
-        buffer_identifier.push(identifier);
-        buffer_datetime.push(datetime);
-
-        buffer_t.push(temperature);
-        buffer_h.push(humidity);
-        buffer_p.push(pressure);
-        buffer_l.push(light);
-
-        buffer_t_.push(temperature_sd);
-        buffer_h_.push(humidity_sd);
-        buffer_p_.push(pressure_sd);
-        buffer_l_.push(light_sd);
+        pushToBuffers();
 
         Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
       }
     }
     else
     {
-      buffer_msg_ids.push(msg);
-      buffer_identifier.push(identifier);
-      buffer_datetime.push(datetime);
-
-      buffer_t.push(temperature);
-      buffer_h.push(humidity);
-      buffer_p.push(pressure);
-      buffer_l.push(light);
-
-      buffer_t_.push(temperature_sd);
-      buffer_h_.push(humidity_sd);
-      buffer_p_.push(pressure_sd);
-      buffer_l_.push(light_sd);
+      pushToBuffers();
 
       Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
     }
@@ -237,19 +239,7 @@ void loop()
   {
     if (!sendPostRequest(xmlchar, msg))
     {
-      buffer_msg_ids.push(msg);
-      buffer_identifier.push(identifier);
-      buffer_datetime.push(datetime);
-
-      buffer_t.push(temperature);
-      buffer_h.push(humidity);
-      buffer_p.push(pressure);
-      buffer_l.push(light);
-
-      buffer_t_.push(temperature_sd);
-      buffer_h_.push(humidity_sd);
-      buffer_p_.push(pressure_sd);
-      buffer_l_.push(light_sd);
+      pushToBuffers();
 
       Serial.printf("[BUFFER] MSG %i Queued !\n\n", msg);
     }
