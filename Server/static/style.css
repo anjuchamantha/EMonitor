@@ -1,3 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;600&display=swap");
+
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+.bg {
+  background-image: url("images/bg.jpg");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(20px);
+  -webkit-filter: blur(20px);
+}
+
+.container {
+  top: 150px;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.widget {
+  width: 360px;
+  height: 250px;
+  border-radius: 20px;
+  /* background: rgba(299, 299, 299, 0.4); */
+  background-color: black;
+}
+
+.widget .left {
+  position: absolute;
+  left: 0;
+  width: 200px;
+}
+
+.widget .right {
+  position: absolute;
+  right: 0;
+  width: 200px;
+  color: #fff;
+  margin: 50px 0;
+}
+
+.icon {
+  width: 75%;
+  margin-bottom: -30px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.weather-status {
+  color: #fff;
+  text-align: center;
+  margin-top: 0;
+}
+
+.widget .right .city {
+  font-size: 1em;
+  text-align: center;
+  margin: 0;
+  text-shadow: 1px 1px 5px #707070;
+}
+
+.widget .right .degree {
+  font-size: 3em;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+  text-shadow: 1px 1px 5px #707070;
+}
+
+.widget .bottom {
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  color: #fff;
+}
+
+.widget .bottom div {
+  /* background-color: yellow; */
+  margin: 5px 15px 5px 15px;
+  text-align: center;
+  line-height: 100%;
+  font-size: 0.83em;
+  text-shadow: 1px 1px 5px #707070;
+}
+
+.bottom div h3 {
+  display: block;
+  /* font-weight: bold; */
+}
+
+.table-div {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -14,16 +119,11 @@ tr:hover {
   background-color: #f5f5f5;
 }
 
-.now-card {
+.card {
   padding: 20px;
   margin: auto;
-  width: 80%;
+  width: 100%;
+  height: 300px;
   align-content: center;
-  background-color: #698996;
-}
-
-.card {
-  margin: auto;
-  text-align: center;
-  background-color: #97b1a6;
+  /* background-color: #698996; */
 }

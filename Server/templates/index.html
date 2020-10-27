@@ -1,60 +1,86 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>EMonitor</title>
-    <!--    <meta name="author" content="name">-->
-    <!--    <meta name="description" content="description here">-->
-    <!--    <meta name="keywords" content="keywords,here">-->
-    <!--    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">-->
-    <!--    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">-->
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-</head>
-<body>
-    <div class ="now-card">
-        <h2>Message ID : {{ table[0].msg_id }}</h2>
-        <h3>Timestamp : {{ table[0].timestamp }}</h3>
-        <div class="card w3-quarter"><p>Temerature : {{ table[0].temperature }}</p></div>
-        <div class="card w3-quarter"><p>Humidity : {{ table[0].humidity }}</p></div>
-        <div class="card w3-quarter"><p>Pressure : {{ table[0].pressure }}</p></div>
-        <div class="card w3-quarter"><p>Light : {{ table[0].light }}</p></div>
-    </div>
-<table>
-    <tr>
-        <th>#</th>
-        <th>Identifier</th>
-        <th>Timestamp</th>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>EMonitor</title>
+        <!--    <meta name="author" content="name">-->
+        <!--    <meta name="description" content="description here">-->
+        <!--    <meta name="keywords" content="keywords,here">-->
+        <!--    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">-->
+        <!--    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">-->
+        <link rel="stylesheet" href="../static/style.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    </head>
+    <body>
+        <div class="card">
+        </div>
 
-        <th>Temperature</th>
-        <th>SD</th>
-        <th>Humidity</th>
-        <th>SD</th>
-        <th>Pressure</th>
-        <th>SD</th>
-        <th>Light</th>
-        <th>SD</th>
-    </tr>
-    {% for entry in table %}
-    <tr>
-        <td>{{ entry.id }}</td>
-        <td>{{ entry.msg_id }}</td>
-        <td>{{ entry.timestamp }}</td>
+        <div class="container">
+            <!-- Weather Widget -->
+            <div class="widget">
+                <div class="left">
+                    <img src="../static/images/cloud.svg" class="icon">
+                    <h5 class="weather-status">MSG {{ table[0].msg_id }}</h5>
+                </div>
+                <div class="right">
+                    <h5 class="city">On {{ table[0].timestamp.split('T')[0] }}
+                    </h5>
+                    <h5 class="city">@ {{
+                        table[0].timestamp.split('T')[1].split('+')[0] }}</h5>
+                    <h5 class="degree">{{ table[0].temperature }}&#176;c</h5>
+                </div>
+                <div class="bottom">
+                    <div>
+                        Humidity (%)<h3> {{ table[0].humidity }}</h3>
+                    </div>
+                    <div>
+                        Pressure (Pa)<h3>{{ table[0].pressure }}</h3>
+                    </div>
+                    <div>
+                        Light (%)<h3>{{ table[0].light }}</h3>
+                    </div>
+                </div>
+            </div>
+            <!-- ./End of weather widget -->
+        </div>
+        <div class="table-div">
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Identifier</th>
+                    <th>Timestamp</th>
 
-        <td>{{ entry.temperature }}</td>
-        <td>{{ entry.temperature_sd }}</td>
-        <td>{{ entry.humidity }}</td>
-        <td>{{ entry.humidity_sd }}</td>
-        <td>{{ entry.pressure }}</td>
-        <td>{{ entry.pressure_sd }}</td>
-        <td>{{ entry.light }}</td>
-        <td>{{ entry.light_sd }}</td>
-    </tr>
+                    <th>Temp</th>
+                    <th>SD</th>
+                    <th>Humidity</th>
+                    <th>SD</th>
+                    <th>Pressure</th>
+                    <th>SD</th>
+                    <th>Light</th>
+                    <th>SD</th>
+                </tr>
+                {% for entry in table %}
+                <tr>
+                    <td>{{ entry.id }}</td>
+                    <td>{{ entry.msg_id }}</td>
+                    <td>{{ entry.timestamp.split('T')[0] }} {{
+                        entry.timestamp.split('T')[1].split('+')[0] }}</td>
 
-    {% endfor %}
+                    <td>{{ entry.temperature }}</td>
+                    <td>{{ entry.temperature_sd }}</td>
+                    <td>{{ entry.humidity }}</td>
+                    <td>{{ entry.humidity_sd }}</td>
+                    <td>{{ entry.pressure }}</td>
+                    <td>{{ entry.pressure_sd }}</td>
+                    <td>{{ entry.light }}</td>
+                    <td>{{ entry.light_sd }}</td>
+                </tr>
 
-</table>
+                {% endfor %}
 
-</body>
+            </table>
+        </div>
+
+    </body>
 </html>
