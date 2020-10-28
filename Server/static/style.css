@@ -7,21 +7,15 @@ html {
   font-family: "Poppins", sans-serif;
 }
 
-.bg {
-  background-image: url("images/bg.jpg");
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  filter: blur(20px);
-  -webkit-filter: blur(20px);
-}
-
-.container {
+.widget-container {
   top: 150px;
   left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
+}
+.chart-container {
+  margin: 20px;
+  margin-bottom: 80px;
 }
 
 .widget {
@@ -120,6 +114,7 @@ tr:hover {
 }
 
 .card {
+  /* all: initial; */
   padding: 20px;
   margin: auto;
   width: 100%;

@@ -114,7 +114,34 @@ def post():
 @app.route('/')
 def index():
     table = EMonitor.query.order_by(desc(EMonitor.timestamp)).limit(20).all()
-    return render_template("index.html", table=table)
+
+    datetimes = []
+    ids = []
+    t = []
+    h = []
+    p = []
+    l = []
+
+    t_sd = []
+    h_sd = []
+    p_sd = []
+    l_sd = []
+    for row in table:
+        datetimes.append(row.timestamp.split('T')[1].split('+')[0][0:5])
+        ids.append(row.msg_id)
+
+        t.append(row.temperature)
+        h.append(row.humidity)
+        p.append(row.pressure)
+        l.append(row.light)
+
+        t_sd.append(row.temperature_sd)
+        h_sd.append(row.humidity_sd)
+        p_sd.append(row.pressure_sd)
+        l_sd.append(row.light_sd)
+
+    return render_template("index.html", table=table, datetimes=datetimes, ids=ids, t=t, h=h, p=p, l=l, t_sd=t_sd,
+                           h_sd=h_sd, p_sd=p_sd, l_sd=l_sd)
 
 
 if __name__ == "__main__":

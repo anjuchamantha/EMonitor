@@ -4,19 +4,17 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>EMonitor</title>
-        <!--    <meta name="author" content="name">-->
-        <!--    <meta name="description" content="description here">-->
-        <!--    <meta name="keywords" content="keywords,here">-->
-        <!--    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">-->
-        <!--    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css">-->
-        <link rel="stylesheet" href="../static/style.css">
+        <script
+            src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/style.css">
     </head>
     <body>
         <div class="card">
         </div>
-
-        <div class="container">
+        <div class="widget-container">
             <!-- Weather Widget -->
             <div class="widget">
                 <div class="left">
@@ -43,6 +41,18 @@
                 </div>
             </div>
             <!-- ./End of weather widget -->
+        </div>
+        <div class="chart-container">
+            <canvas id="temperatureChart" width="400" height="80"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="humidityChart" width="400" height="80"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="pressureChart" width="400" height="80"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="lightChart" width="400" height="80"></canvas>
         </div>
         <div class="table-div">
             <table>
@@ -81,6 +91,222 @@
 
             </table>
         </div>
+        <script>
+            // Global parameters:
+            // do not resize the chart canvas when its container does (keep at 600x400px)
+            // Chart.defaults.global.responsive = false;
+            
+            // define the chart data
+            var temperatureData = {
+                labels : [{% for item in datetimes %}
+                            "{{item}}",
+                            {% endfor %}],
+                datasets : [{
+                    label: ' Temperature',
+                    fill: true,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(253,128,128,0.4)",
+                    borderColor: "rgba(253,128,128,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(253,128,128,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(253,128,128,1)",
+                    pointHoverBorderColor: "rgba(253,128,128,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data : [{% for item in t %}
+                                {{item}},
+                            {% endfor %}],
+                    spanGaps: false
+                }]
+            }
 
+            var humidityData = {
+                labels : [{% for item in datetimes %}
+                            "{{item}}",
+                            {% endfor %}],
+                datasets : [{
+                    label: ' Humidity',
+                    fill: true,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(148,218,251,0.4)",
+                    borderColor: "rgba(148,218,251,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(148,218,251,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(148,218,251,1)",
+                    pointHoverBorderColor: "rgba(148,218,251,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data : [{% for item in h %}
+                                {{item}},
+                            {% endfor %}],
+                    spanGaps: false
+                }]
+            }
+
+            var pressureData = {
+                labels : [{% for item in datetimes %}
+                            "{{item}}",
+                            {% endfor %}],
+                datasets : [{
+                    label: ' Pressure',
+                    fill: true,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(252,186,57,0.4)",
+                    borderColor: "rgba(252,186,57,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(252,186,57,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(252,186,57,1)",
+                    pointHoverBorderColor: "rgba(252,186,57,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data : [{% for item in p %}
+                                {{item}},
+                            {% endfor %}],
+                    spanGaps: false
+                }]
+            }
+
+            var lightData = {
+                labels : [{% for item in datetimes %}
+                            "{{item}}",
+                            {% endfor %}],
+                datasets : [{
+                    label: ' Light',
+                    fill: true,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(38,231,166,0.4)",
+                    borderColor: "rgba(38,231,166,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(38,231,166,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(38,231,166,1)",
+                    pointHoverBorderColor: "rgba(38,231,166,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data : [{% for item in l %}
+                                {{item}},
+                            {% endfor %}],
+                    spanGaps: false
+                }]
+            }
+ 
+            // get chart canvas
+            var ctx1 = document.getElementById("temperatureChart").getContext("2d");
+            
+            // create the chart using the chart canvas
+            var temperatureChart = new Chart(ctx1, {
+            type: 'line',
+            data: temperatureData,
+            options: {
+                scales: {
+                        xAxes: [{
+                        gridLines: {
+                            display: true
+                            }
+                        }],
+                        yAxes: [{
+                        gridLines: {
+                            display: false
+                            }
+                        }]
+                    }
+                }
+            });
+
+            var ctx2 = document.getElementById("humidityChart").getContext("2d");
+            
+            // create the chart using the chart canvas
+            var humidityChart = new Chart(ctx2, {
+            type: 'line',
+            data: humidityData,
+            options: {
+                scales: {
+                        xAxes: [{
+                        gridLines: {
+                            display: true
+                            }
+                        }],
+                        yAxes: [{
+                        gridLines: {
+                            display: false
+                            }
+                        }]
+                    }
+                }
+            
+            });
+
+            var ctx3 = document.getElementById("pressureChart").getContext("2d");
+            
+            // create the chart using the chart canvas
+            var pressureChart = new Chart(ctx3, {
+            type: 'line',
+            data: pressureData,
+            options: {
+                scales: {
+                        xAxes: [{
+                        gridLines: {
+                            display: true
+                            }
+                        }],
+                        yAxes: [{
+                        gridLines: {
+                            display: false
+                            }
+                        }]
+                    }
+                }
+            });
+
+            var ctx4 = document.getElementById("lightChart").getContext("2d");
+            
+            // create the chart using the chart canvas
+            var lightChart = new Chart(ctx4, {
+            type: 'line',
+            data: lightData,
+            options: {
+                scales: {
+                        xAxes: [{
+                        gridLines: {
+                            display: true
+                            }
+                        }],
+                        yAxes: [{
+                        gridLines: {
+                            display: false
+                            }
+                        }]
+                    }
+                }
+            });
+
+        </script>
     </body>
 </html>
