@@ -61,13 +61,13 @@
                     <th>Identifier</th>
                     <th>Timestamp</th>
 
-                    <th>Temp</th>
+                    <th>Temp (°C)</th>
                     <th>SD</th>
-                    <th>Humidity</th>
+                    <th>Humidity (%)</th>
                     <th>SD</th>
-                    <th>Pressure</th>
+                    <th>Pressure (Pa)</th>
                     <th>SD</th>
-                    <th>Light</th>
+                    <th>Light (%)</th>
                     <th>SD</th>
                 </tr>
                 {% for entry in table %}
@@ -102,7 +102,7 @@
                             "{{item}}",
                             {% endfor %}],
                 datasets : [{
-                    label: ' Temperature',
+                    label: ' Temperature (°C)',
                     fill: true,
                     lineTension: 0.1,
                     backgroundColor: "rgba(253,128,128,0.4)",
@@ -132,7 +132,7 @@
                             "{{item}}",
                             {% endfor %}],
                 datasets : [{
-                    label: ' Humidity',
+                    label: ' Humidity (%)',
                     fill: true,
                     lineTension: 0.1,
                     backgroundColor: "rgba(148,218,251,0.4)",
@@ -162,7 +162,7 @@
                             "{{item}}",
                             {% endfor %}],
                 datasets : [{
-                    label: ' Pressure',
+                    label: ' Pressure (Pa)',
                     fill: true,
                     lineTension: 0.1,
                     backgroundColor: "rgba(252,186,57,0.4)",
@@ -192,7 +192,7 @@
                             "{{item}}",
                             {% endfor %}],
                 datasets : [{
-                    label: ' Light',
+                    label: ' Light (%)',
                     fill: true,
                     lineTension: 0.1,
                     backgroundColor: "rgba(38,231,166,0.4)",
