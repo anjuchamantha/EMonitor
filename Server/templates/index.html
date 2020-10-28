@@ -43,16 +43,16 @@
             <!-- ./End of weather widget -->
         </div>
         <div class="chart-container">
-            <canvas id="temperatureChart" width="400" height="80"></canvas>
+            <canvas id="temperatureChart"></canvas>
         </div>
         <div class="chart-container">
-            <canvas id="humidityChart" width="400" height="80"></canvas>
+            <canvas id="humidityChart"></canvas>
         </div>
         <div class="chart-container">
-            <canvas id="pressureChart" width="400" height="80"></canvas>
+            <canvas id="pressureChart"></canvas>
         </div>
         <div class="chart-container">
-            <canvas id="lightChart" width="400" height="80"></canvas>
+            <canvas id="lightChart"></canvas>
         </div>
         <div class="table-div">
             <table>
@@ -225,6 +225,7 @@
             type: 'line',
             data: temperatureData,
             options: {
+                maintainAspectRatio:false,
                 scales: {
                         xAxes: [{
                         gridLines: {
@@ -247,6 +248,7 @@
             type: 'line',
             data: humidityData,
             options: {
+                maintainAspectRatio:false,
                 scales: {
                         xAxes: [{
                         gridLines: {
@@ -270,6 +272,7 @@
             type: 'line',
             data: pressureData,
             options: {
+                maintainAspectRatio:false,
                 scales: {
                         xAxes: [{
                         gridLines: {
@@ -292,6 +295,7 @@
             type: 'line',
             data: lightData,
             options: {
+                maintainAspectRatio:false,
                 scales: {
                         xAxes: [{
                         gridLines: {

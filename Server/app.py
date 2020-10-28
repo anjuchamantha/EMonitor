@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc
+from sqlalchemy import desc,asc
 from flask_restful import Api, Resource
 from xml.etree import ElementTree
 
@@ -126,8 +126,8 @@ def index():
     h_sd = []
     p_sd = []
     l_sd = []
-    for row in table:
-        datetimes.append(row.timestamp.split('T')[1].split('+')[0][0:5])
+    for row in reversed(table):
+        datetimes.append(row.timestamp.split('T')[1].split('+')[0])
         ids.append(row.msg_id)
 
         t.append(row.temperature)
