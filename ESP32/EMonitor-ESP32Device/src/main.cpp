@@ -14,6 +14,8 @@ using namespace std;
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#include "mail_client.h"
+
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
@@ -168,6 +170,9 @@ void setup()
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 }
 
+bool mailSent = false;
+int mailTime = 10;
+
 void loop()
 {
   //BUFFER LOGIC
@@ -189,8 +194,6 @@ void loop()
       int msg_id_buf = buffer_msg_ids.front();
       String identifier_buf = (String)buffer_identifier.front();
       String datetime_buf = (String)buffer_datetime.front();
-      Serial.println(identifier_buf);
-      Serial.println(datetime_buf);
 
       double t_buf = buffer_t.front();
       double h_buf = buffer_h.front();
@@ -238,8 +241,8 @@ void loop()
   int x = 0;
   //Get 10 sensor values in 0.5s intervals
   //Calculate median & s.d for values in 10s intervals (10 readings x 1s)
-  int rounds = 10;
-  int round_time = 1000;
+  int rounds = 15;
+  int round_time = 2000;
 
   //get values and keep in the arrays
   double t_[rounds];
@@ -289,6 +292,17 @@ void loop()
   identifier = String(msg);
   getTimeStamp(datetime_);
   datetime = String(datetime_);
+
+  if (temperature > 40)
+  {
+    if (!mailSent || (mailTime < 1))
+    {
+      sendMail(temperature);
+      mailSent = true;
+      mailTime = 10;
+    }
+    mailTime--;
+  }
 
   // Get the xml as a string to xmlchar variable
   generateXMLStr(xmlchar,
