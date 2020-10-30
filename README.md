@@ -111,9 +111,13 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 ## 5) Schematic diagram of EMonitor Device
 
-<schematic diagram of device>
+*Breadboard Schematic*
 
+<img src="Design and Documents/EMonitor desiugn_bb.png" style="zoom: 80%;" />
 
+*PCB Design*
+
+<img src="Design and Documents/EMonitor desiugn_pcb.png" style="zoom: 80%;" />
 
 ## 6) Fault Recovery Implementation
 
@@ -363,6 +367,58 @@ void loop(){
 
 
 ### 8.2) Backend Server Logic
+
+```python
+#database table model
+class EMonitor(db.Model):
+    __tablename__ = 'sensor_data'
+    id = db.Column(db.Integer, primary_key=True)
+    msg_id = db.Column(db.String(128))
+    timestamp = db.Column(db.String(128))
+
+    temperature = db.Column(db.Float)
+    humidity = db.Column(db.Float)
+    pressure = db.Column(db.Float)
+    light = db.Column(db.Float)
+
+    temperature_sd = db.Column(db.Float)
+    humidity_sd = db.Column(db.Float)
+    pressure_sd = db.Column(db.Float)
+    light_sd = db.Column(db.Float)
+    
+    
+def extract_data_from_xml(xml_str):
+    """
+    Given a XML string(CAP) this extracts the 'parameter' values
+    :param xml_str: XML as a string
+    :return: data as dictionary {name:value}
+    """
+  
+def put_to_db(xml_data):
+    """
+    given a data dictionary this method put the data to the database
+    :param xml_data: data as dictionary {name:value}
+    :return: True if database write successful, otherwise False
+    """
+    
+@app.route('/data', methods=['POST'])
+def post():
+    xml_str = request.data
+    xml_data = extract_data_from_xml(xml_str)
+    print("[POST] /data : ", xml_data)
+    if put_to_db(xml_data):
+        return "DATABASE updated"
+    else:
+        return "DATABASE modification failed !"
+ 
+@app.route('/')
+def index():
+    #query the database table and get the list of data
+    table = EMonitor.query.order_by(desc(EMonitor.timestamp)).limit(20).all()
+
+    return render_template("index.html", table)
+
+```
 
 
 

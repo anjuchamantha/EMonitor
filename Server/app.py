@@ -83,6 +83,11 @@ def extract_data_from_xml(xml_str):
 
 
 def put_to_db(xml_data):
+    """
+    given a data dictionary this method put the data to the database
+    :param xml_data: data as dictionary {name:value}
+    :return: True if database write successful, otherwise False
+    """
     msg_id = (xml_data['identifier'])
     timestamp = xml_data['datetime']
 
