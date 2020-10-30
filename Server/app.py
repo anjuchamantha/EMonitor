@@ -9,7 +9,7 @@ import logging
 
 app = Flask(__name__)
 
-ENV = 'production'
+ENV = 'dev'
 
 if ENV == 'dev':
     app.debug = True

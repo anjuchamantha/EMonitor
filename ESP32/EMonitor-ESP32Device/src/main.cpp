@@ -280,20 +280,20 @@ void loop()
   Serial.printf("Temperature : %.2f +- %.2f %s \n", temperature, temperature_sd, "°C");
   Serial.printf("Humidity    : %.2f +- %.2f %s \n", humidity, humidity_sd, "%");
   Serial.printf("Pressure    : %.2f +- %.2f %s \n", pressure, pressure_sd, "Pa");
-  Serial.printf("Light       : %.2f +- %.2f \n", light, light_sd);
+  Serial.printf("Light       : %.2f +- %.2f %s \n", light, light_sd, "%");
   Serial.print("\n");
 
   t0 = String("Temp     " + String(temperature) + "     C");
   t1 = String("Humidity " + String(humidity) + "     %");
   t2 = String("Pressure " + String(pressure) + " Pa");
-  t3 = String("Light    " + String(light) + " L");
+  t3 = String("Light    " + String(light) + "     %");
   displayText();
 
   identifier = String(msg);
   getTimeStamp(datetime_);
   datetime = String(datetime_);
 
-  if (temperature > 40)
+  if ((temperature > 40) && (WiFi.status() == WL_CONNECTED))
   {
     if (!mailSent || (mailTime < 1))
     {
@@ -356,5 +356,4 @@ void loop()
     }
   }
   msg++;
-  // delay(10000);
 }
