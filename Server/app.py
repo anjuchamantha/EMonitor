@@ -1,12 +1,15 @@
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc,asc
+from sqlalchemy import desc, asc
 from flask_restful import Api, Resource
 from xml.etree import ElementTree
 
+import sys
+import logging
+
 app = Flask(__name__)
 
-ENV = 'dev'
+ENV = 'production'
 
 if ENV == 'dev':
     app.debug = True
@@ -14,7 +17,11 @@ if ENV == 'dev':
 
 else:
     debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = ''
+    app.config[
+        'SQLALCHEMY_DATABASE_URI'] = 'postgres://hzbuwdagklnpog:3d389e4927a6df93af4704c4cef861a000b85b6dac31c7f31832b56eb7daf297@ec2-54-156-53-71.compute-1.amazonaws.com:5432/dfuqu09213kv5f'
+
+    app.logger.addHandler(logging.StreamHandler(sys.stdout))
+    app.logger.setLevel(logging.ERROR)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
