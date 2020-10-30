@@ -253,6 +253,113 @@ void popBuffers(){
 
 ### 8.1) EMonitor Device Algorithm
 
+*main.cpp*
+
+```cpp
+void beginOLED(){
+    //initial setup and starting of OLED Display
+}
+void displayText(){
+    //display the content in the OLED display
+    //in various places, this function is called to print sensor and other information
+}
+void getTimeStamp(){
+    //get the current time
+}
+void popBuffers(){
+    //pop the front element from the queues
+}
+void pushToBuffers(){
+    //push all the raw data needed for MSG to queues
+}
+
+void setup(){
+    beginOLED();
+    wait_and_connect_to_wifi();
+  	begin_sensors();
+    configTime();
+}
+
+void loop(){
+    
+  //BUFFER LOGIC
+
+  //loop buffer if buffer is not empty
+  //	if connected
+  //		POST buffer data and pop from buffer
+  //	else break
+    while (!buffer_msg_ids.empty()){
+        if (WiFi.status() == WL_CONNECTED){
+            //generate CAP XML message from the data in buffers
+            generateXMLStr();
+            if (sendPostRequest(xmlchar_buf, msg_id_buf)){
+                popBuffers();
+            }
+        }
+    }
+    
+    //MAIN LOGIC
+    
+	//calculate readings and create CAP MSG
+    int x = 0;
+    int rounds = 15;
+  	int round_time = 2000;
+    while (x < rounds){
+        readTemperature();
+        readHumidity();
+        readPressure();
+        readLightIntensity();
+            
+        delay(round_time);
+        x++;
+    }
+    temperature = calculate_mean(t_, rounds);
+  	humidity = calculate_mean(h_, rounds);
+  	pressure = calculate_mean(p_, rounds);
+  	light = calculate_mean(l_, rounds);
+    
+    temperature_sd = calculate_sd(t_, rounds, temperature);
+  	humidity_sd = calculate_sd(h_, rounds, humidity);
+  	pressure_sd = calculate_sd(p_, rounds, pressure);
+  	light_sd = calculate_sd(l_, rounds, light);
+    
+    getTimeStamp(datetime_);
+    
+    //send WARNING e-mail
+    if ((temperature > 40) && (WiFi.status() == WL_CONNECTED)){
+        //if a warning e-mail has not sent in last 5minutes
+        //	send mail
+    }
+    
+    //generate CAP XML message from the calculated data
+    generateXMLStr();
+    
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        bool connected = connect_to_wifi();
+        if (connected){
+            //send MSG to server
+            if (!sendPostRequest(xmlchar, msg)){
+                //buffer MSG
+                pushToBuffers();
+            }
+        }
+        else{
+            //buffer MSG
+            pushToBuffers();
+        }
+    }
+    else{
+        //send MSG to server
+        if (!sendPostRequest(xmlchar, msg)){
+            //buffer MSG
+            pushToBuffers();
+        }
+    }
+}
+
+```
+
 
 
 ### 8.2) Backend Server Logic
