@@ -10,11 +10,9 @@
 
 ## 1) EMonitor Device : features & specifications
 
-<Photo of EMonitor Device >
-
 <Solidworks design>
 
-
+![](Images/device.png)
 
 > *Scope of the Project*
 
@@ -64,9 +62,13 @@ In both above cases EMonitor detects the connection issue and cash the raw data 
 
 
 
-## 2) Server & Database : features & specifications
+## 2) Website, Server & Database : features & specifications
 
 **Deployed EMonitor website** : **[http://e-monitor.herokuapp.com/](http://e-monitor.herokuapp.com/)**
+
+![](Images/heroku.png)
+
+
 
 The backend server is developed using [Flask](https://flask.palletsprojects.com/en/1.1.x/) which is a Python based web framework. It supports all the existing python libraries and tools and hence it is very much scalable and extensible. 
 
@@ -81,15 +83,13 @@ The EMonitor device uses `/data` end-point to send data to the server using CAP 
 
 `/` endpoint is used to access the main dashboard of the EMonitor website, which shows the current(last received) readings as well as charts and the data of last 20 readings received.
 
-<Screenshot of Dashboard>
-
 
 
 ## 3) Special features
 
 ### 3.1) OLED Display to view Readings and Connection States
 
-<Photo of OLED display>
+![](Images/oled.png)
 
 OLED Display shows the temperature, humidity, pressure and light level values which are sent to the server with the `msg_id` after each TN time interval. Also it shows the Wi-Fi and Server connection statuses.(0 - Not connected, 1 - Connected)
 
@@ -97,7 +97,7 @@ OLED Display shows the temperature, humidity, pressure and light level values wh
 
 ### 3.2) Automatic warning Email sending through EMonitor Device
 
-<Screenshot of EMail>
+<img src="Images/email.png"  />
 
 The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a value of a `MSG` exceeds a given threshold limit. 
 
@@ -121,13 +121,118 @@ As mentioned in *1.5) Connection Lost Self-Recovery*, EMonitor is capable of sel
 
 ### 6.1) Auto connect to Wi-Fi
 
-<Pseodo code of wifi auto connect>
+```cpp
+void loop{
+	//calculate readings and create CAP MSG
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        //if not connected, try to connect to WiFi in each loop iteration
+        bool connected = connect_to_wifi();
+        if (connected){
+            //send MSG to server
+        }
+        else{
+            //buffer MSG
+        }
+    }
+    else{
+        //send MSG to server
+    }
+}
+
+bool connect_to_wifi(){
+    WiFi.begin(SSID,PW) //begin the wifi connection
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        return truue;
+    }
+    else{
+        return false;
+    }
+}
+```
 
 
 
 ### 6.2) MSG Buffering
 
-<Pseodo code of buffering process>
+There are total of 11 buffers as follows
+
+```cpp
+queue<String> buffer_identifier;
+queue<String> buffer_datetime;
+queue<int> buffer_msg_ids;
+
+//mean buffers
+queue<double> buffer_t;
+queue<double> buffer_h;
+queue<double> buffer_p;
+queue<double> buffer_l;
+
+//sd buffers
+queue<double> buffer_t_;
+queue<double> buffer_h_;
+queue<double> buffer_p_;
+queue<double> buffer_l_;
+```
+
+
+
+```cpp
+void loop{
+  //BUFFER LOGIC
+
+  //loop buffer if buffer is not empty
+  //	if connected
+  //		POST buffer data and pop from buffer
+  //	else break
+    while (!buffer_msg_ids.empty()){
+        if (WiFi.status() == WL_CONNECTED){
+            //create CAP MSG from raw data in buffers
+            if (sendPostRequest(xmlchar_buf, msg_id_buf)){
+                popBuffers();
+            }
+        }
+    }
+    
+    //MAIN LOGIC
+    
+	//calculate readings and create CAP MSG
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        bool connected = connect_to_wifi();
+        if (connected){
+            //send MSG to server
+            if (!sendPostRequest(xmlchar, msg)){
+                //buffer MSG
+                pushToBuffers();
+            }
+        }
+        else{
+            //buffer MSG
+            pushToBuffers();
+        }
+    }
+    else{
+        //send MSG to server
+        if (!sendPostRequest(xmlchar, msg)){
+            //buffer MSG
+            pushToBuffers();
+        }
+    }
+}
+
+void pushToBuffers(){
+    //push all the raw data needed for MSG to queues
+}
+
+void popBuffers(){
+    //pop the front element from the queues
+}
+
+
+
+```
 
 
 
