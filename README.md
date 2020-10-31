@@ -53,7 +53,7 @@ Following are the basic data sent to the server as a message which is referred a
 
 `msg_id, timestamp, temperature, humidity, pressure, light, temperature_sd, humidity_sd, pressure_sd, light_sd`
 
-Other than these data, some constant data that are mandatory for CAP, like `sender`,`msg type`, `category`, `urgency` etc are sent to the server.
+Other than these data, some constant data that are mandatory for CAP, like `sender`,`msg type`, `category`, `urgency` etc are also sent to the server.
 
 ### 1.5)Connection Lost Self-Recovery
 
@@ -64,11 +64,11 @@ The EMonitor device is capable of withstand the following connection lost scenar
 
 The device can self re-connect to Wi-Fi or self re-connect to server after any of the above cases. But the data is secure even during such connection issues.
 
-In both above cases EMonitor detects the connection issue and cash the raw data which were not able to send to the server due to connection lost, to a buffer. After each TN time interval, the device checks the connection and if the connection is stable, it sends all the data which were buffered to the server and clears the buffer. (During this process also if the connection is lost, it keeps the data safely in the buffer without removing)
+In both above cases EMonitor detects the connection issue and cash the raw data which were not able to send to the server due to connection lost, to a buffer. After each TN time interval, the device checks the connection and if the connection is stable, it sends all the data which were buffered, to the server and clears the buffer. (During this process also if the connection is lost, it keeps the data safely in the buffer without removing)
 
 
 
-## 2) Website, Server & Database : features & specifications
+## 2) Website, Server & Database : Features & Specifications
 
 **Deployed EMonitor website** : **[http://e-monitor.herokuapp.com/](http://e-monitor.herokuapp.com/)**
 
@@ -91,7 +91,7 @@ The EMonitor device uses `/data` end-point to send data to the server using CAP 
 
 
 
-## 3) Special features
+## 3) Special Features
 
 ### 3.1) OLED Display to view Readings and Connection States
 
@@ -248,7 +248,7 @@ void popBuffers(){
 
 
 
-## 7) List of components and their cost 
+## 7) List of components and their costs
 
 - NodeMCU ESP-32S Microcontroller (LKR 1,050.00)
 - BMP180 Digital Barometric Pressure Sensor (LKR 185.00)
@@ -256,12 +256,12 @@ void popBuffers(){
 - LDR (LKR 10)
 - OLED Display 0.96" (LKR 600.00)
 - Resistor 220Ohm (LKR 1.00)
-- Capacitor 10 micro F (LKR 20) - Used to back out the code uploading issue to ESP32
+- Capacitor 10 micro F (LKR 20) - Used to back out the code uploading issue of ESP32
 - Vero Board & Circuit Wires (LKR 150)
 
 
 
-## 8) Algorithm used for device and server (Pseudo code)
+## 8) Algorithm used for the device and server (Pseudo code)
 
 ### 8.1) EMonitor Device Algorithm
 
@@ -431,3 +431,19 @@ def index():
 
 
 ## 9) Full source code (an Annexure)
+
+The full source code(Both EMonitor device & Server) can also be viewed in [https://github.com/anjuchamantha/EMonitor
+
+Below is the directory & file structure of the device & server source codes
+
+<img src="Images/file_structure.png" style="zoom: 100%;" />
+
+### 9.1) EMonitor device source code
+
+
+
+
+
+
+
+### 9.2) Server source code
