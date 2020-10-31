@@ -1,16 +1,18 @@
-# EMonitor - Environment Monitor Device
+# EMonitor - Environment Monitoring Device
 
 *by Anju Chamantha*
 
 
 
-## Content
+## Table of Content
 
 [TOC]
 
 ## 1) EMonitor Device : features & specifications
 
 <Solidworks design>
+
+*Prototype Device*
 
 ![](Images/device.png)
 
@@ -93,7 +95,7 @@ The EMonitor device uses `/data` end-point to send data to the server using CAP 
 
 OLED Display shows the temperature, humidity, pressure and light level values which are sent to the server with the `msg_id` after each TN time interval. Also it shows the Wi-Fi and Server connection statuses.(0 - Not connected, 1 - Connected)
 
- It also shows if a `MSG` is not sent to the server and buffered (using a `*` symbol)
+ It also shows if a `MSG` is not sent to the server and buffered (using a `*` symbol) and sending buffered `MSG`s to the server (using \<B> symbol)
 
 ### 3.2) Automatic warning Email sending through EMonitor Device
 
@@ -107,17 +109,19 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 ## 4) Design Architecture & Diagram
 
-<high level architecture diagram : modules components server db>
+![](Design and Documents/EMonitor Architecture.png)
+
+
 
 ## 5) Schematic diagram of EMonitor Device
 
-*Breadboard Schematic*
+*Breadboard Circuit Schematic*
 
-<img src="Design and Documents/EMonitor desiugn_bb.png" style="zoom: 80%;" />
+<img src="Design and Documents/EMonitor design_bb.png" style="zoom: 80%;" />
 
 *PCB Design*
 
-<img src="Design and Documents/EMonitor desiugn_pcb.png" style="zoom: 80%;" />
+<img src="Design and Documents/EMonitor design_pcb.png" style="zoom: 80%;" />
 
 ## 6) Fault Recovery Implementation
 
@@ -248,7 +252,7 @@ void popBuffers(){
 - LDR (LKR 10)
 - OLED Display 0.96" (LKR 600.00)
 - Resistor 220Ohm (LKR 1.00)
-- Capacitor 10 micro F (LKR 20)
+- Capacitor 10 micro F (LKR 20) - Used to back out the code uploading issue to ESP32
 - Vero Board & Circuit Wires (LKR 150)
 
 
