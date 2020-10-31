@@ -2,11 +2,17 @@
 
 *by Anju Chamantha*
 
+Website : [http://e-monitor.herokuapp.com](http://e-monitor.herokuapp.com/)
 
+GitHub : [https://github.com/anjuchamantha/EMonitor](https://github.com/anjuchamantha/EMonitor)
 
 ## Table of Content
 
 [TOC]
+
+## 1) Introduction
+
+EMonitor is a ESP32 Microcontroller based device which gets environmental data such as Temperature, Humidity, Pressure, Light Intensity, and sends those data to a Back-end database server using CAP(Common Alert Protocol). Also those data and other connection status information can be viewed from the OLED-display locally. The data that were sent to the server can be visualized using a simple [web-page](http://e-monitor.herokuapp.com/). The device also features self fault recovery mechanisms to add more reliability to the system. EMonitor also sends a warning e-mail to pre-defined e-mail addresses in case of any sensor data exceeding a given threshold value.
 
 ## 1) EMonitor Device : features & specifications
 
@@ -41,15 +47,13 @@ Data is transmitted from the EMonitor device to the cloud hosted [EMonitor serve
 
 The sensor data (temperature, humidity, pressure, light level) are read at **T** time intervals and after **N** number of sensor readings the Mean & Standard Deviation of those N number of data are sent to the server using CAP protocol. So the data is sent to the server at **TN** time intervals. (There can be an average 2-3s delay other than TN due to the other logics and calculations)
 
-*Example : Take N=15 & T=60s => The a sensor reading is taken for every 1 minute and after 15 rounds (after 15 minutes) the mean and standard deviation of those 15 samples are send to the server.*
+*Example : Take N=15 & T=60s => The sensor readings are taken every 1 minute and after 15 rounds/readings (after 1min x 15 = 15 minutes) the mean and standard deviation of those 15 samples are send to the server.*
 
 Following are the basic data sent to the server as a message which is referred as `MSG` hereafter.
 
 `msg_id, timestamp, temperature, humidity, pressure, light, temperature_sd, humidity_sd, pressure_sd, light_sd`
 
-Other than these data, some constant data that are mandatory for CAP like sender,msg type, category, urgency etc are sent to the server.
-
-
+Other than these data, some constant data that are mandatory for CAP, like `sender`,`msg type`, `category`, `urgency` etc are sent to the server.
 
 ### 1.5)Connection Lost Self-Recovery
 
@@ -58,9 +62,9 @@ The EMonitor device is capable of withstand the following connection lost scenar
 - Wi-Fi connection Lost 
 - Lost of connection to the EMonitor server
 
-The device can self re-connect to Wi-Fi or self re-connect to server after any of the above cases. But the data is secure even after such connection issue.
+The device can self re-connect to Wi-Fi or self re-connect to server after any of the above cases. But the data is secure even during such connection issues.
 
-In both above cases EMonitor detects the connection issue and cash the raw data which were not able to send to the server due to connection lost to a buffer. After each TN time interval, the device checks the connection and if the connection is stable, it sends all the data which were buffered to the server and clears the buffer. (During this process also if the connection is lost, it keeps the data safely in the buffer)
+In both above cases EMonitor detects the connection issue and cash the raw data which were not able to send to the server due to connection lost, to a buffer. After each TN time interval, the device checks the connection and if the connection is stable, it sends all the data which were buffered to the server and clears the buffer. (During this process also if the connection is lost, it keeps the data safely in the buffer without removing)
 
 
 
