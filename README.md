@@ -14,7 +14,7 @@ GitHub : [https://github.com/anjuchamantha/EMonitor](https://github.com/anjucham
 
 EMonitor is a ESP32 Microcontroller based device which gets environmental data such as Temperature, Humidity, Pressure, Light Intensity, and sends those data to a Back-end database server using CAP(Common Alert Protocol). Also those data and other connection status information can be viewed from the OLED-display locally. The data that were sent to the server can be visualized using a simple [web-page](http://e-monitor.herokuapp.com/). The device also features self fault recovery mechanisms to add more reliability to the system. EMonitor also sends a warning e-mail to pre-defined e-mail addresses in case of any sensor data exceeding a given threshold value.
 
-## 1) EMonitor Device : features & specifications
+## 2) EMonitor Device : features & specifications
 
 <Solidworks design>
 
@@ -26,24 +26,24 @@ EMonitor is a ESP32 Microcontroller based device which gets environmental data s
 
 EMonitor is a [ESP32](https://www.espressif.com/en/products/socs/esp32) microcontroller based device which has Wi-Fi inbuilt. With its Xtensa LX6 microprocessor operating at 240 MHz and memory of 520 KiB SRAM, EMonitor is more than capable of capturing the environment and sending data to the server after doing the necessary calculations seamlessly.  It runs on [FreeRTOS](https://www.iottechtrends.com/best-operating-systems-arduino/), a leading operating system supported by Arduino which can be working with the relevant peripherals smoothly.
 
-### 1.1) Measuring Parameters
+### 2.1) Measuring Parameters
 
 - Temperature (°C) 	- DHT11 Sensor module
 - Humidity (%) 			- DHT11 Sensor module
 - Pressure (Pa) 			- BMP180 Sensor module
 - Light Level (%) 		  - LDR module
 
-### 1.2) Power
+### 2.2) Power
 
 The device can be powered using a Micro USB cable which is a very reliable mode of powering the ESP32 microcontroller. Since pretty much every standard mobile phone charging adapter outputs 5V, this device can be powered using the same way which means there's nothing to worry about power. Also EMonitor can be powered using any mobile phone charging power-bank which makes the device portable. 
 
 The ESP32 is a low power consuming microcontroller and has adaptive power controlling mechanisms which can handle some basic power related matters that makes the EMonitor very reliable when powering with Micro USB cable.
 
-### 1.3) Communication Protocol
+### 2.3) Communication Protocol
 
 Data is transmitted from the EMonitor device to the cloud hosted [EMonitor server](http://e-monitor.herokuapp.com/) using [CAP](http://docs.oasis-open.org/emergency/cap/v1.2/CAP-v1.2-os.html) (Common Alerting Protocol) over internet. CAP is an XML based data format for exchanging public warnings and emergencies between alerting technologies. 
 
-### 1.4) Sensor Readings & Data sending to server
+### 2.4) Sensor Readings & Data sending to server
 
 The sensor data (temperature, humidity, pressure, light level) are read at **T** time intervals and after **N** number of sensor readings the Mean & Standard Deviation of those N number of data are sent to the server using CAP protocol. So the data is sent to the server at **TN** time intervals. (There can be an average 2-3s delay other than TN due to the other logics and calculations)
 
@@ -55,7 +55,7 @@ Following are the basic data sent to the server as a message which is referred a
 
 Other than these data, some constant data that are mandatory for CAP, like `sender`,`msg type`, `category`, `urgency` etc are also sent to the server.
 
-### 1.5)Connection Lost Self-Recovery
+### 2.5)Connection Lost Self-Recovery
 
 The EMonitor device is capable of withstand the following connection lost scenarios,
 
@@ -68,7 +68,7 @@ In both above cases EMonitor detects the connection issue and cash the raw data 
 
 
 
-## 2) Website, Server & Database : Features & Specifications
+## 3) Website, Server & Database : Features & Specifications
 
 **Deployed EMonitor website** : **[http://e-monitor.herokuapp.com/](http://e-monitor.herokuapp.com/)**
 
@@ -91,9 +91,9 @@ The EMonitor device uses `/data` end-point to send data to the server using CAP 
 
 
 
-## 3) Special Features
+## 4) Special Features
 
-### 3.1) OLED Display to view Readings and Connection States
+### 4.1) OLED Display to view Readings and Connection States
 
 ![](Images/oled.png)
 
@@ -101,7 +101,7 @@ OLED Display shows the temperature, humidity, pressure and light level values wh
 
  It also shows if a `MSG` is not sent to the server and buffered (using a `*` symbol) and sending buffered `MSG`s to the server (using \<B> symbol)
 
-### 3.2) Automatic warning Email sending through EMonitor Device
+### 4.2) Automatic warning Email sending through EMonitor Device
 
 <img src="Images/email.png"  />
 
@@ -111,13 +111,13 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 
 
-## 4) Design Architecture Diagram
+## 5) Design Architecture Diagram
 
 <img src="Design and Documents/EMonitor Architecture.png" style="zoom: 80%;" />
 
 
 
-## 5) Schematic diagram of EMonitor Device
+## 6) Schematic diagram of EMonitor Device
 
 *Breadboard Circuit Schematic*
 
@@ -127,11 +127,11 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 <img src="Design and Documents/EMonitor design_pcb.png" style="zoom: 80%;" />
 
-## 6) Fault Recovery Implementation
+## 7) Fault Recovery Implementation
 
 As mentioned in *1.5) Connection Lost Self-Recovery*, EMonitor is capable of self connecting to Wi-Fi & Server after a connection lost. During the connection lost period, the MSGs are buffered and when the connection is established back, it sends the buffered MSGs to the server.
 
-### 6.1) Auto connect to Wi-Fi
+### 7.1) Auto connect to Wi-Fi
 
 ```cpp
 void loop{
@@ -166,7 +166,7 @@ bool connect_to_wifi(){
 
 
 
-### 6.2) MSG Buffering
+### 7.2) MSG Buffering
 
 There are total of 11 buffers as follows
 
@@ -248,7 +248,7 @@ void popBuffers(){
 
 
 
-## 7) List of components and their costs
+## 8) List of components and their costs
 
 - NodeMCU ESP-32S Microcontroller (LKR 1,050.00)
 - BMP180 Digital Barometric Pressure Sensor (LKR 185.00)
@@ -261,9 +261,9 @@ void popBuffers(){
 
 
 
-## 8) Algorithm used for the device and server (Pseudo code)
+## 9) Algorithm used for the device and server (Pseudo code)
 
-### 8.1) EMonitor Device Algorithm
+### 9.1) EMonitor Device Algorithm
 
 *main.cpp*
 
@@ -374,7 +374,7 @@ void loop(){
 
 
 
-### 8.2) Backend Server Logic
+### 9.2) Backend Server Logic
 
 ```python
 #database table model
@@ -430,7 +430,7 @@ def index():
 
 
 
-## 9) Full source code (an Annexure)
+## 10) Full source code (an Annexure)
 
 The full source code(Both EMonitor device & Server) can also be viewed in [https://github.com/anjuchamantha/EMonitor
 
@@ -438,7 +438,7 @@ Below is the directory & file structure of the device & server source codes
 
 <img src="Images/file_structure.png" style="zoom: 100%;" />
 
-### 9.1) EMonitor device source code
+### 10.1) EMonitor device source code
 
 #### *main.cpp*
 
@@ -1207,7 +1207,7 @@ void generateXMLStr(char *xmlchar,
 
 
 
-### 9.2) Server source code
+### 10.2) Server source code
 
 #### *app.py*
 
