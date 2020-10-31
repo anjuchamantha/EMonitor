@@ -20,7 +20,7 @@ EMonitor is a ESP32 Microcontroller based device which gets environmental data s
 
 *Prototype Device*
 
-![](Images/device.png)
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Images/device.png?raw=true" style="zoom: 80%;" />
 
 > *Scope of the Project*
 
@@ -72,7 +72,7 @@ In both above cases EMonitor detects the connection issue and cash the raw data 
 
 **Deployed EMonitor website** : **[http://e-monitor.herokuapp.com/](http://e-monitor.herokuapp.com/)**
 
-![](Images/heroku.png)
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Images/heroku.png?raw=true" style="zoom: 100%;" />
 
 
 
@@ -95,7 +95,7 @@ The EMonitor device uses `/data` end-point to send data to the server using CAP 
 
 ### 4.1) OLED Display to view Readings and Connection States
 
-![](Images/oled.png)
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Images/oled.png?raw=true" style="zoom: 100%;" />
 
 OLED Display shows the temperature, humidity, pressure and light level values which are sent to the server with the `msg_id` after each TN time interval. Also it shows the Wi-Fi and Server connection statuses.(0 - Not connected, 1 - Connected)
 
@@ -103,7 +103,7 @@ OLED Display shows the temperature, humidity, pressure and light level values wh
 
 ### 4.2) Automatic warning Email sending through EMonitor Device
 
-<img src="Images/email.png"  />
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Images/email.png?raw=true" style="zoom: 100%;" />
 
 The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a value of a `MSG` exceeds a given threshold limit. 
 
@@ -113,7 +113,7 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 ## 5) Design Architecture Diagram
 
-<img src="Design and Documents/EMonitor Architecture.png" style="zoom: 80%;" />
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Design%20and%20Documents/EMonitor%20Architecture.png?raw=true" style="zoom: 100%;" />
 
 
 
@@ -121,11 +121,13 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 *Breadboard Circuit Schematic*
 
-<img src="Design and Documents/EMonitor design_bb.png" style="zoom: 80%;" />
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Design%20and%20Documents/EMonitor%20design_bb.png?raw=true" style="zoom: 100%;" />
 
 *PCB Design*
 
-<img src="Design and Documents/EMonitor design_pcb.png" style="zoom: 80%;" />
+
+
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Design%20and%20Documents/EMonitor%20design_pcb.png?raw=true" style="zoom: 100%;" />
 
 ## 7) Fault Recovery Implementation
 
@@ -436,7 +438,7 @@ The full source code(Both EMonitor device & Server) can also be viewed in [https
 
 Below is the directory & file structure of the device & server source codes
 
-<img src="Images/file_structure.png" style="zoom: 100%;" />
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Images/file_structure.png?raw=true" style="zoom: 100%;" />
 
 ### 10.1) EMonitor device source code
 
