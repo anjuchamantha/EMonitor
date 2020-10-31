@@ -107,9 +107,9 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 
 
-## 4) Design Architecture & Diagram
+## 4) Design Architecture Diagram
 
-![](Design and Documents/EMonitor Architecture.png)
+<img src="Design and Documents/EMonitor Architecture.png" style="zoom: 80%;" />
 
 
 
