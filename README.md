@@ -1,12 +1,11 @@
 # EMonitor - Environment Monitoring Device
 
-*by Anju Chamantha*
+*by Anju Chamantha*(170074T)
 
-Website : [http://e-monitor.herokuapp.com](http://e-monitor.herokuapp.com/)
-
-GitHub : [https://github.com/anjuchamantha/EMonitor](https://github.com/anjuchamantha/EMonitor)
-
-## Table of Content
+> Website : [http://e-monitor.herokuapp.com](http://e-monitor.herokuapp.com/)
+>
+> GitHub : [https://github.com/anjuchamantha/EMonitor](https://github.com/anjuchamantha/EMonitor)
+>
 
 [TOC]
 
@@ -15,8 +14,6 @@ GitHub : [https://github.com/anjuchamantha/EMonitor](https://github.com/anjucham
 EMonitor is a ESP32 Microcontroller based device which gets environmental data such as Temperature, Humidity, Pressure, Light Intensity, and sends those data to a Back-end database server using CAP(Common Alert Protocol). Also those data and other connection status information can be viewed from the OLED-display locally. The data that were sent to the server can be visualized using a simple [web-page](http://e-monitor.herokuapp.com/). The device also features self fault recovery mechanisms to add more reliability to the system. EMonitor also sends a warning e-mail to pre-defined e-mail addresses in case of any sensor data exceeds a given threshold value.
 
 ## 2) EMonitor Device : features & specifications
-
-<Solidworks design>
 
 *Prototype Device*
 
@@ -436,7 +433,7 @@ def index():
 
 
 
-## 10) Full source code (an Annexure)
+## 10) Annexure - Full source code
 
 The full source code(Both EMonitor device & Server) can also be viewed in [https://github.com/anjuchamantha/EMonitor
 
