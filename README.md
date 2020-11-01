@@ -12,7 +12,7 @@ GitHub : [https://github.com/anjuchamantha/EMonitor](https://github.com/anjucham
 
 ## 1) Introduction
 
-EMonitor is a ESP32 Microcontroller based device which gets environmental data such as Temperature, Humidity, Pressure, Light Intensity, and sends those data to a Back-end database server using CAP(Common Alert Protocol). Also those data and other connection status information can be viewed from the OLED-display locally. The data that were sent to the server can be visualized using a simple [web-page](http://e-monitor.herokuapp.com/). The device also features self fault recovery mechanisms to add more reliability to the system. EMonitor also sends a warning e-mail to pre-defined e-mail addresses in case of any sensor data exceeding a given threshold value.
+EMonitor is a ESP32 Microcontroller based device which gets environmental data such as Temperature, Humidity, Pressure, Light Intensity, and sends those data to a Back-end database server using CAP(Common Alert Protocol). Also those data and other connection status information can be viewed from the OLED-display locally. The data that were sent to the server can be visualized using a simple [web-page](http://e-monitor.herokuapp.com/). The device also features self fault recovery mechanisms to add more reliability to the system. EMonitor also sends a warning e-mail to pre-defined e-mail addresses in case of any sensor data exceeds a given threshold value.
 
 ## 2) EMonitor Device : features & specifications
 
@@ -35,9 +35,9 @@ EMonitor is a [ESP32](https://www.espressif.com/en/products/socs/esp32) microcon
 
 ### 2.2) Power
 
-The device can be powered using a Micro USB cable which is a very reliable mode of powering the ESP32 microcontroller. Since pretty much every standard mobile phone charging adapter outputs 5V, this device can be powered using the same way which means there's nothing to worry about power. Also EMonitor can be powered using any mobile phone charging power-bank which makes the device portable. 
+The device can be powered using a Micro USB cable which is a very reliable mode of powering the ESP32 microcontroller. Since almost every standard mobile phone charging adapter outputs 5V, this device can be powered using the same way which means there's nothing to worry about power. Also EMonitor can be powered using any mobile phone charging power-bank which makes the device portable. 
 
-The ESP32 is a low power consuming microcontroller and has adaptive power controlling mechanisms which can handle some basic power related matters that makes the EMonitor very reliable when powering with Micro USB cable.
+The ESP32 is a low power consuming microcontroller relative to other microcontrollers in the market, and has adaptive power controlling mechanisms which can handle some basic power related matters that makes the EMonitor very reliable when powering with Micro USB cable.
 
 ### 2.3) Communication Protocol
 
@@ -45,9 +45,9 @@ Data is transmitted from the EMonitor device to the cloud hosted [EMonitor serve
 
 ### 2.4) Sensor Readings & Data sending to server
 
-The sensor data (temperature, humidity, pressure, light level) are read at **T** time intervals and after **N** number of sensor readings the Mean & Standard Deviation of those N number of data are sent to the server using CAP protocol. So the data is sent to the server at **TN** time intervals. (There can be an average 2-3s delay other than TN due to the other logics and calculations)
+The sensor data (temperature, humidity, pressure, light level) are read at **T** time intervals and after **N** number of sensor readings, the Mean & Standard Deviation of those N number of data are sent to the server using CAP protocol. So the data is sent to the server at **TN** time intervals. (There can be an average 2-3s delay other than TN due to the other logics and calculations)
 
-*Example : Take N=15 & T=60s => The sensor readings are taken every 1 minute and after 15 rounds/readings (after 1min x 15 = 15 minutes) the mean and standard deviation of those 15 samples are send to the server.*
+*Example : Take N=15 & T=60s => The sensor readings are taken every 1 minute and after 15 rounds/readings (after 1min x 15 = 15 minutes) the mean and standard deviation of those 15 samples are sent to the server.*
 
 Following are the basic data sent to the server as a message which is referred as `MSG` hereafter.
 
@@ -55,16 +55,16 @@ Following are the basic data sent to the server as a message which is referred a
 
 Other than these data, some constant data that are mandatory for CAP, like `sender`,`msg type`, `category`, `urgency` etc are also sent to the server.
 
-### 2.5)Connection Lost Self-Recovery
+### 2.5) Self-Recovery in a Connection Loss
 
-The EMonitor device is capable of withstand the following connection lost scenarios,
+The EMonitor device is capable of withstanding the following scenarios in which the connection is lost.
 
 - Wi-Fi connection Lost 
-- Lost of connection to the EMonitor server
+- Loss of connection to the EMonitor server
 
-The device can self re-connect to Wi-Fi or self re-connect to server after any of the above cases. But the data is secure even during such connection issues.
+The device can self re-connect to Wi-Fi or self re-connect to server in any of the above cases. But the data is secure even during such connection issues.
 
-In both above cases EMonitor detects the connection issue and cash the raw data which were not able to send to the server due to connection lost, to a buffer. After each TN time interval, the device checks the connection and if the connection is stable, it sends all the data which were buffered, to the server and clears the buffer. (During this process also if the connection is lost, it keeps the data safely in the buffer without removing)
+In both above cases EMonitor detects the connection issue and cash the raw data which were not sent to the server due to connection loss, to a buffer. After each TN time interval, the device checks the connection and if the connection is stable, it sends all the data which were buffered, to the server and clears the buffer. (During this process also if the connection is lost, it keeps the data safe in the buffer without removing)
 
 
 
@@ -99,7 +99,7 @@ The EMonitor device uses `/data` end-point to send data to the server using CAP 
 
 OLED Display shows the temperature, humidity, pressure and light level values which are sent to the server with the `msg_id` after each TN time interval. Also it shows the Wi-Fi and Server connection statuses.(0 - Not connected, 1 - Connected)
 
- It also shows if a `MSG` is not sent to the server and buffered (using a `*` symbol) and sending buffered `MSG`s to the server (using \<B> symbol)
+ It also shows if a `MSG` is not sent to the server and buffered (using a `*` symbol) and sends buffered `MSG`s to the server (using \<B> symbol)
 
 ### 4.2) Automatic warning Email sending through EMonitor Device
 
@@ -131,7 +131,7 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 ## 7) Fault Recovery Implementation
 
-As mentioned in *1.5) Connection Lost Self-Recovery*, EMonitor is capable of self connecting to Wi-Fi & Server after a connection lost. During the connection lost period, the MSGs are buffered and when the connection is established back, it sends the buffered MSGs to the server.
+As mentioned in *2.5) Self-Recovery in a Connection Loss*, EMonitor is capable of self connecting to Wi-Fi & Server after a connection retrieval. During the period of connection loss, the MSGs are buffered and when the connection is established back, it sends the buffered MSGs to the server.
 
 ### 7.1) Auto connect to Wi-Fi
 
@@ -247,6 +247,10 @@ void popBuffers(){
 
 
 ```
+
+### 7.3) Self start after a power retrieval 
+
+When after a power failure and when the power is retrieved back, the device is automatically started and continued the data reading and data transmitting process as usual.
 
 
 
