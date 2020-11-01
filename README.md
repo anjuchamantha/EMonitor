@@ -19,6 +19,10 @@ EMonitor is a ESP32 Microcontroller based device which gets environmental data s
 
 <img src="https://github.com/anjuchamantha/EMonitor/blob/main/Images/device.png?raw=true" style="zoom: 80%;" />
 
+
+
+
+
 > *Scope of the Project*
 
 EMonitor is a [ESP32](https://www.espressif.com/en/products/socs/esp32) microcontroller based device which has Wi-Fi inbuilt. With its Xtensa LX6 microprocessor operating at 240 MHz and memory of 520 KiB SRAM, EMonitor is more than capable of capturing the environment and sending data to the server after doing the necessary calculations seamlessly.  It runs on [FreeRTOS](https://www.iottechtrends.com/best-operating-systems-arduino/), a leading operating system supported by Arduino which can be working with the relevant peripherals smoothly.
