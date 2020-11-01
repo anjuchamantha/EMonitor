@@ -21,7 +21,7 @@ EMonitor is a ESP32 Microcontroller based device which gets environmental data s
 
 
 
-
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Design%20and%20Documents/Enclosure1.jpeg?raw=true" style="zoom: 80%;" />
 
 > *Scope of the Project*
 
