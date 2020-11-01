@@ -122,7 +122,7 @@ The EMonitor device sends a WARNING e-mail to a pre defined  e-mail address if a
 
 *Schematic Diagram*
 
-<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Design%20and%20Documents/EMonitor%20design_bb.png?raw=true" style="zoom: 100%;" />
+<img src="https://github.com/anjuchamantha/EMonitor/blob/main/Design%20and%20Documents/EMonitor%20design_schem.png?raw=true" style="zoom: 100%;" />
 
 
 
