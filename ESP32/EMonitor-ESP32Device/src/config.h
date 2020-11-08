@@ -3,7 +3,6 @@
 
 extern const char *SSID;
 extern const char *PW;
-
 extern const char *serverBase;
 
 #define emailSenderAccount "SENDER_EMAIL"
